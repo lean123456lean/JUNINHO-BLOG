@@ -173,15 +173,3 @@ app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
 
-
-// Apagar os comentários de teste com a palavra 'teste' no texto
-db.run("DELETE FROM comentarios WHERE texto LIKE '%teste%'", function (err) {
-  if (err) {
-      console.error('Erro ao apagar os comentários de teste:', err.message);
-  } else {
-      console.log(`Comentários de teste apagados com sucesso! Total removido: ${this.changes}`);
-  }
-});
-
-// Fechar a conexão
-db.close();
