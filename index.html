@@ -1,0 +1,417 @@
+<html>
+
+<head>
+    <title>Blog TAG-TECH</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="icon" href="./assets/src/Blue Modern Technology & Gaming Logo (3).png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+</head>
+
+<body class="w3-light-grey">
+
+    <div class="w3-content" style="max-width:1400px">
+
+        <!-- Header -->
+        <header class="w3-container w3-center w3-padding-32">
+            <h1><b><img src="./assets/src/logo.png" alt=""></b></h1>
+            <p class="p">Transformando códigos em ideias<span class="w3-tag span">uma linha de cada vez</span></p>
+
+            <section class="search" id="search">
+                <div class="w3-padding w3-xlarge w3-text-blue">
+                    <input type="text" id="searchBar" placeholder="Pesquisar posts...">
+                    <i class="glyphicon glyphicon-search"></i>
+                </div>
+            </section>
+
+            <section id="datetime">
+                <div class="date-time-container">
+                    <h3 id="currentDate"></h3>
+                    <p id="currentTime"></p>
+                </div>
+            </section>
+        </header>
+
+
+
+        <!-- Grid -->
+        <div class="w3-row">
+            <!-- Blog entries -->
+            <div class="w3-col l8 s12">
+                <!-- Blog entry -->
+                <div class="w3-card-4 w3-margin w3-white">
+                    <div class="w3-container">
+                        <h3><b>Últimas Notícias sobre Tecnologia</b></h3>
+                        <h5>Atualizações da área de tecnologia</h5>
+                    </div>
+                    <div class="w3-container" id="tech-news">
+                        <div class="w3-center">
+                            <div class="w3-spinner w3-spin" style="width: 30px; height: 30px;"></div>
+                        </div>
+                    </div>
+                    <div class="w3-col m4 w3-hide-small">
+                        <div class="container-modal mt-3">
+                            <p><span class="w3-padding-large w3-right"><b><button type="button" class="btn btn-primary"
+                                            data-bs-toggle="modal" data-bs-target="#myModal">
+                                            Comentários
+                                        </button></b> <span class="w3-tag"></span></span></p>
+                        </div>
+
+
+                        <div class="modal" id="myModal" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <!-- Modal Header -->
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Bem-vindo(a)!</h4>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Fechar"></button>
+                                    </div>
+
+                                    <!-- Modal Body -->
+                                    <div class="modal-body">
+                                        <div class="comment-section">
+                                            <h3>Adicione um comentário</h3>
+                                            <form id="commentForm" class="comment-form">
+                                                <label for="commentAuthor" class="sr-only">Seu nome</label>
+                                                <input type="text" id="commentAuthor" placeholder="Seu nome" required
+                                                    class="form-input" />
+                                                <label for="commentText" class="sr-only">Seu comentário</label>
+                                                <textarea id="commentText" placeholder="Seu comentário" required
+                                                    class="form-textarea"></textarea>
+                                                <button type="submit" class="form-button">Publicar
+                                                    Comentário</button>
+                                            </form>
+                                            <<div class="comment-list">
+                                                <h3>Comentários</h3>
+                                                <div id="comment-counter"
+                                                    style="font-weight: bold; margin-bottom: 10px;">Comentários: 0</div>
+                                                <div id="commentsList">
+                                                    <!-- Comentários serão adicionados dinamicamente -->
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Modal Footer -->
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fechar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="body-clima">
+            <div class="container-temp">
+                <input class="input-cidade" placeholder="Digite o nome da cidade">
+                <button onclick="cliqueiNoBotao()">
+                    <img class="lupa" src="https://www.svgrepo.com/show/488200/find.svg" alt="Buscar">
+                </button>
+
+                <div class="caixa-media">
+                    <h2 class="cidade">Tempo em Rio de Janeiro</h2>
+                    <p class="temp">28°C</p>
+                    <p class="text-previsao">Céu limpo</p> <!-- Descrição do clima -->
+                    <div class="condicao-clima">
+                        <img class="icone" src="https://openweathermap.org/img/wn/04n.png" alt="Ícone do clima">
+                        <p class="condicao">Céu Limpo</p> <!-- Exibição da condição detalhada -->
+                    </div>
+                    <p class="umidade">Umidade: 70%</p>
+                </div>
+            </div>
+        </div>
+
+
+        <section id="dollar-quote">
+            <div class="unique-card">
+                <div class="background-overlay"></div>
+                <div class="card-content">
+                    <div>
+                        <h2 class="dollar-title">Cotação do Dólar</h2>
+                        <p id="quote">Carregando...</p>
+                        <button class="button-dolar" onclick="fetchDollarQuote()">Atualizar Cotação</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Blog entry -->
+        <div class="w3-card-4 w3-margin w3-white">
+            <img src="https://png.pngtree.com/element_our/20200609/ourlarge/pngtree-children-s-software-programming-image_2230759.jpg"
+                alt="Norway" style="width:50%">
+            <div class="w3-container">
+                <h3><b>Programação</b></h3>
+                <h4><b>Guia completo: O que um programador júnior precisa saber para se destacar no mercado</b>
+                </h4>
+                <h5>O que um programador junior precisa saber? Conheça as habilidades e competências importantes
+                    para se destacar no mercado de programação., <span class="w3-opacity">Junho 6, 2024</span>
+                </h5>
+            </div>
+
+            <div class="w3-container">
+                <p>
+                <h3>
+                    Conhecimentos Básicos para um Programador Júnior</h3><br>
+                <h4>Linguagens de programação.</h4><br>
+                É importante que um programador júnior tenha conhecimento em pelo menos uma linguagem de
+                programação. Existem várias opções disponíveis, como Java, Python, JavaScript, C++ e muitas
+                outras. Dominar uma linguagem de programação permitirá ao programador criar e desenvolver
+                soluções em software.<br>
+                <h4>Algoritmos e estruturas de dados</h4><br>
+                Um bom entendimento de algoritmos e estruturas de dados é essencial para um programador júnior.
+                Isso envolve aprender como organizar e manipular dados de forma eficiente, além de entender os
+                algoritmos utilizados para resolver problemas específicos</p>
+                <h4>Banco de dados</h4>
+                Conhecimentos básicos de bancos de dados são importantes para trabalhar com sistemas que exigem
+                armazenamento e recuperação de dados. Compreender conceitos de SQL e modelagem de dados permite
+                ao programador júnior criar e manipular bancos de dados de forma eficiente.<br>
+                <h4>Fundamentos da Web</h4><br>
+                A web é uma parte vital do mundo da programação atualmente. Ter conhecimentos básicos sobre
+                HTML, CSS e JavaScript é essencial para um programador júnior que deseja desenvolver aplicativos
+                web interativos e responsivos.
+                <div class="w3-row">
+                    <div class="w3-col m8 s12">
+                        <a href="https://awari.com.br/guia-completo-o-que-um-programador-junior-precisa-saber-para-se-destacar-no-mercado/"
+                            target="_blank">
+                            <button class="w3-button w3-padding-large w3-white w3-border">
+                                LEIA MAIS »
+                            </button>
+                        </a>
+                    </div>
+                    <div class="container mt-3">
+                        <!-- Botão para abrir o segundo modal -->
+                        <p>
+                            <span class="w3-padding-large w3-right">
+                                <b>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#myModal2">
+                                        Comentários
+                                    </button>
+                                </b>
+                                <span class="w3-tag"></span>
+                            </span>
+                        </p>
+                    </div>
+
+                    <!-- Segundo Modal -->
+                    <div class="modal" id="myModal2" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Comentários</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Fechar"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="comment-section">
+                                        <h3>Adicione um comentário</h3>
+                                        <form id="commentForm2" class="comment-form">
+                                            <label for="commentAuthor2" class="sr-only">Seu nome</label>
+                                            <input type="text" id="commentAuthor2" placeholder="Seu nome" required
+                                                class="form-input" />
+                                            <label for="commentText2" class="sr-only">Seu comentário</label>
+                                            <textarea id="commentText2" placeholder="Seu comentário" required
+                                                class="form-textarea"></textarea>
+                                            <button type="submit" class="form-button">Publicar
+                                                Comentário</button>
+                                        </form>
+                                        <div class="comment-list">
+                                            <h3>Comentários</h3>
+                                            <div id="commentsList2">
+                                                <div id="post"></div>
+                                                <!-- Comentários serão adicionados dinamicamente -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fechar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END BLOG ENTRIES -->
+    </div>
+    <hr>
+    <!--
+            <section id="publisch">
+                <h2>publique seu Post</h2>
+                <div class="w3-col l4">
+                    <div class="w3-card w3-margin w3-margin-top">
+                        <form id="publishForm">
+                            <input type=""text" id="postTitle" placeholder="Título do Post" required>
+                            <textarea id="postText" placeholder="Texto do Post" required></textarea>
+                            <button type="submit">Publicar</button>
+                        </form>
+
+                        <main id="post">
+                            <article class="post">
+                                <h2 class="post-title">Título do Post</h2>
+                                <p class="post-text">Texto do Post</p>
+                            </article>
+                        </main>
+                    </div>
+            </section>
+            -->
+
+
+    <!-- Posts -->
+
+
+    <div class="w3-card w3-margin">
+        <div class="w3-container w3-padding">
+            <h4>Posts Populares</h4>
+        </div>
+        <hr>
+        <ul class="w3-ul w3-hoverable w3-white" id="popular-posts">
+            <!-- Os posts serão carregados dinamicamente aqui -->
+        </ul>
+    </div>
+    <hr>
+    <!-- Labels / tags -->
+    <div class="w3-card w3-margin">
+        <div class="w3-container w3-padding">
+            <h4>Tags</h4>
+        </div>
+        <p>
+            <span class="w3-tag w3-black w3-margin-bottom" onclick="toggleSelection(this)">Tecnologia</span>
+            <span class="w3-tag w3-light-grey w3-small w3-margin-bottom"
+                onclick="toggleSelection(this)">Programação</span>
+            <span class="w3-tag w3-light-grey w3-small w3-margin-bottom"
+                onclick="toggleSelection(this)">Desenvolvimento</span>
+            <span class="w3-tag w3-light-grey w3-small w3-margin-bottom" onclick="toggleSelection(this)">Web</span>
+            <span class="w3-tag w3-light-grey w3-small w3-margin-bottom" onclick="toggleSelection(this)">Mobile</span>
+            <span class="w3-tag w3-light-grey w3-small w3-margin-bottom" onclick="toggleSelection(this)">Inteligência
+                Artificial</span>
+            <span class="w3-tag w3-light-grey w3-small w3-margin-bottom"
+                onclick="toggleSelection(this)">Segurança</span>
+            <span class="w3-tag w3-light-grey w3-small w3-margin-bottom" onclick="toggleSelection(this)">Redes</span>
+            <span class="w3-tag w3-light-grey w3-small w3-margin-bottom" onclick="toggleSelection(this)">Cloud</span>
+        </p>
+    </div>
+    <!-- END Introduction Menu -->
+    </div>
+    </div><br>
+
+    <hr>
+    <h1 style="text-align: center;"></h1>
+    <div class="container" id="languages-grid">
+        <div class="container">
+            <div class="item" id="package-details-1">Item 1</div>
+            <div class="item" id="package-details-2">Item 2</div>
+            <div class="item" id="package-details-3">Item 3</div>
+            <div class="item" id="package-details-4">Item 4</div>
+            <div class="item" id="package-details-5">Item 5</div>
+            <div class="item" id="package-details-6">Item 6</div>
+        </div>
+
+    </div>
+    <hr>
+
+    <!-- END w3-content -->
+    </div>
+
+    <!-- Footer -->
+    <footer class="w3-container w3-dark-grey w3-padding-32 w3-margin-top">
+        <div id="footer_content">
+            <div id="footer_contacts">
+                <img style="width: 90%;" src="./assets/src/logo.png" alt="">
+
+                <div id="footer_social_media">
+                    <a href="#" class="footer-link" id="instagram">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+
+                    <a href="#" class="footer-link" id="facebook">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+
+                    <a href="#" class="footer-link" id="whatsapp">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </a>
+                </div>
+            </div>
+
+            <ul class="footer-list">
+                <li>
+                    <h3>Blog</h3>
+                </li>
+                <li>
+                    <a href="https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox" class="footer-link">E-mail</a>
+                </li>
+                <li>
+                    <a href="https://www.freecodecamp.org/portuguese/news/os-10-sites-da-web-mais-populares-com-desafios-de-programacao/"
+                        class="footer-link">Onde praticar programação</a>
+                </li>
+                <li>
+                    <a href="https://www.youtube.com/playlist?list=PLXx8PbU9q6fkDPW9DcOBWruPrhGmfR6cF"
+                        class="footer-link">Musicas</a>
+                </li>
+            </ul>
+
+            <ul class="footer-list">
+                <li>
+                    <h3>Products</h3>
+                </li>
+                <li>
+                    <a href="#" class="footer-link">Sobre</a>
+                </li>
+                <li>
+                    <a href="https://g1.globo.com/tecnologia/" class="footer-link">Noticias</a>
+                </li>
+                <li>
+                    <a href="https://www.w3schools.com/w3css/w3css_templates.asp" class="footer-link">w3schools</a>
+                </li>
+            </ul>
+
+            <div id="footer_subscribe">
+                <h3>Subscrever</h3>
+
+                <p>
+                    Digite seu e-mail para ser notificado sobre nossas Soluções de Notícias.
+                </p>
+
+                <form id="input_group">
+                    <input type="email" id="email" placeholder="Digite seu email">
+                    <button type="submit">
+                        <i class="fa-regular fa-envelope"></i>
+                        <span id="spinner" class="spinner" style="display: none;"></span>
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+        <div id="footer_copyright">
+            &#169
+            2024 Todos os direitos reservados JUNINHO BLOG
+        </div>
+        <script src="index.js"></script>
+
+
+
+</body>
+
+</html>
