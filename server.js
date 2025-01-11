@@ -2,13 +2,19 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const axios = require('axios');
+
+
 
 const app = express();
 const PORT = 3000;
+app.use(cors({
+  origin: 'https://lean123456lean.github.io/JUNINHO-BLOG/', // Substitua com o domínio do seu blog
+}));
 
 // Middleware
 app.use(bodyParser.json());
-app.use(cors());
+
 
 // Configurar banco de dados SQLite
 const db = new sqlite3.Database('./database.db', (err) => {
@@ -18,6 +24,41 @@ const db = new sqlite3.Database('./database.db', (err) => {
     console.log('Conexão com o banco de dados estabelecida.');
   }
 });
+
+
+// Endpoint para buscar artigos do Dev.to
+app.get('/api/devto-articles', async (req, res) => {
+  try {
+    const response = await axios.get('https://dev.to/api/articles', {
+      params: {
+        tag: 'javascript', // Filtro por tag (ex: "javascript", "react", etc.)
+        per_page: 10 // Número de artigos por página
+      }
+    });
+
+    const articles = response.data.map((article) => ({
+      title: article.title,
+      description: article.description,
+      url: article.url,
+      image: article.cover_image || 'https://via.placeholder.com/150', // Imagem ou placeholder
+      publishedAt: article.published_at,
+      author: article.user.name
+    }));
+
+    res.status(200).json(articles);
+  } catch (error) {
+    console.error('Erro ao buscar artigos do Dev.to:', error);
+    res.status(500).json({ error: 'Erro ao buscar artigos do Dev.to' });
+  }
+});
+
+
+
+
+
+
+
+
 
 // Criar tabelas se não existirem
 db.serialize(() => {
@@ -55,29 +96,6 @@ db.serialize(() => {
   );
 });
 
-  /*
-  // Criar tabelas se não existirem
-db.serialize(() => {
-  // Tabela "comentarios"
-  db.run(
-    `CREATE TABLE IF NOT EXISTS comments (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      author TEXT,
-      text TEXT,
-      modal_id TEXT
-    )`,
-    (err) => {
-      if (err) {
-        console.error('Erro ao criar a tabela "comments":', err.message);
-      } else {
-        console.log('Tabela "comments" pronta para uso.');
-      }
-    }
-  );
-});
-});
-
-*/
 // Rota para adicionar um comentário
 app.post('/add-comment', (req, res) => {
   const { autor, comentario } = req.body;
@@ -104,10 +122,6 @@ app.get('/comentarios', (req, res) => {
       res.json(rows);
   });
 });
-
-
-
-
 
 
 // Rota para inserir e-mail

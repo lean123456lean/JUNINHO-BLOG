@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./assets/src/favicon.png" type="image/x-icon">
+    <title>Blog Seguro</title>
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #007BFF;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        form input,
+        form textarea,
+        form button {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        form button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background: #0056b3;
+        }
+
+        #comentarios-list .comentario {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="./assets/src/logo.png" alt="">
+    </header>
+
+    <main>
+        <!-- Formulário de Login -->
+        <section id="login">
+            <h2>Login</h2>
+            <form id="login-form">
+                <input type="email" id="email" placeholder="E-mail" required>
+                <input type="password" id="password" placeholder="Senha" required>
+                <button type="submit">Login</button>
+            </form>
+            <p id="login-message"></p>
+        </section>
+
+        <!-- Seção de Comentários -->
+        <section id="comentarios">
+            <h2>Comentários</h2>
+            <form id="comentario-form">
+                <textarea id="comentario" placeholder="Deixe seu comentário..." required></textarea>
+                <button type="submit">Comentar</button>
+            </form>
+            <div id="comentarios-list"></div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

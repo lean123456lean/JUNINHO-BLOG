@@ -51,12 +51,61 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
+    
     // Chama a função para carregar os posts
     fetchPosts();
 });
 
+//Função para buscar as notícias do Dev.to
+
+document.addEventListener('DOMContentLoaded', function () {
+    const tagSelect = document.getElementById('tag');
+    const articlesContainer = document.getElementById('articles-container');
+
+    // Função para buscar as notícias do Dev.to com base na tag selecionada
+    async function fetchArticles(tag) {
+        try {
+            const response = await fetch(`https://dev.to/api/articles?tag=${tag}&per_page=5`);
+            const articles = await response.json();
+
+            // Limpar o conteúdo anterior
+            articlesContainer.innerHTML = '';
+
+            // Adicionar os novos artigos à página
+            articles.forEach(article => {
+                const articleCard = document.createElement('div');
+                articleCard.classList.add('article-card');
+
+                articleCard.innerHTML = `
+                    <img src="${article.cover_image || 'https://via.placeholder.com/150'}" alt="${article.title}">
+                    <h3>${article.title}</h3>
+                    <p>${article.description}</p>
+                    <a href="${article.url}" target="_blank">Ler mais</a>
+                `;
+
+                articlesContainer.appendChild(articleCard);
+            });
+        } catch (error) {
+            console.error('Erro ao buscar artigos:', error);
+            articlesContainer.innerHTML = '<p>Erro ao carregar artigos. Tente novamente mais tarde.</p>';
+        }
+    }
+
+    // Carregar artigos de JavaScript por padrão
+    fetchArticles('javascript');
+
+    // Atualizar os artigos quando a tag for alterada
+    tagSelect.addEventListener('change', function () {
+        const selectedTag = tagSelect.value;
+        fetchArticles(selectedTag);
+    });
+});
 
 
+
+
+
+/* Data e hora */
 function updateDateTime() {
     const now = new Date();
 
@@ -80,7 +129,6 @@ updateDateTime();
 
 
 /* Clima tempo */
-
 
 // Substitua pela sua chave da API
 let chave = "95b21e4252bb169915cd54982dc75099";
@@ -154,45 +202,62 @@ let chave = "95b21e4252bb169915cd54982dc75099";
 // Função para buscar dados da API
 
 
-async function fetchPackageDetails(platform, packageName, elementId) {
-    const apiKey = '8917eb60bace34608742a80fa6e2a97d'; // Substitua pela sua API Key
-    const url = `https://libraries.io/api/${platform}/${packageName}?api_key=${apiKey}`;
+const languagesGrid = document.getElementById("languages-grid");
+let allLanguages = [5]; // Array para armazenar todos os dados retornados
+
+// Função para buscar dados da API
+async function fetchLanguageDetails() {
+    const url = "https://api.github.com/gists/public";
 
     try {
         const response = await fetch(url);
         const data = await response.json();
 
-        document.getElementById(elementId).innerHTML = `
-            <h2>Pacote: ${data.name}</h2>
-            <p>${data.description}</p>
-            <ul>
-                <li><strong>Última versão estável:</strong> ${data.latest_stable_release_number}</li>
-                <li><strong>Publicado em:</strong> ${new Date(data.latest_stable_release_published_at).toLocaleDateString()}</li>
-                <li><strong>Licença:</strong> ${data.licenses}</li>
-                <li><strong>Homepage:</strong> <a href="${data.homepage}" target="_blank">${data.homepage}</a></li>
-                <li><strong>Repositório:</strong> <a href="${data.repository_url}" target="_blank">${data.repository_url}</a></li>
-                <li><strong>Dependências diretas:</strong> ${data.dependent_repos_count}</li>
-                <li><strong>Dependentes:</strong> ${data.dependents_count}</li>
-                <li><strong>Estrelas no GitHub:</strong> ${data.stars}</li>
-            </ul>
-        `;
+        // Filtra apenas os gists com linguagens e armazena os resultados
+        allLanguages = data
+            .filter(gist => gist.files && Object.values(gist.files)[0].language)
+            .map(gist => ({
+                language: Object.values(gist.files)[0].language,
+                description: gist.description || "Sem descrição disponível",
+                link: gist.html_url
+            }));
+
+        // Exibe os resultados no grid
+        displayLanguages(allLanguages);
     } catch (error) {
-        console.error('Erro ao buscar dados:', error);
+        console.error("Erro ao buscar linguagens:", error);
+        languagesGrid.innerHTML = `<p>Erro ao carregar dados. Tente novamente mais tarde.</p>`;
     }
 }
 
-// Chama a função para cada item com diferentes pacotes
-fetchPackageDetails('npm', 'javascript', 'package-details-1');
-fetchPackageDetails('npm', 'node', 'package-details-2');
-fetchPackageDetails('npm', 'angular', 'package-details-3');
-fetchPackageDetails('npm', 'jquery', 'package-details-4');
-fetchPackageDetails('npm', 'lodash', 'package-details-5');
-fetchPackageDetails('npm', 'express', 'package-details-6');
+// Função para exibir as linguagens no grid
+function displayLanguages(languages) {
+    languagesGrid.innerHTML = ""; // Limpa o grid antes de adicionar novos itens
+    languages.forEach(language => {
+        const htmlContent = `
+            <div class="item">
+                <h2>${language.language}</h2>
+                <p>${language.description}</p>
+                <a href="${language.link}" target="_blank">Veja o exemplo</a>
+            </div>
+        `;
+        languagesGrid.innerHTML += htmlContent;
+    });
+}
 
+// Função para buscar linguagens com base no termo de pesquisa
+function searchLanguage() {
+    const searchInput = document.getElementById("searchInput").value.toLowerCase();
+    const filteredLanguages = allLanguages.filter(language =>
+        language.language.toLowerCase().includes(searchInput)
+    );
 
-// Exemplo: Buscar detalhes sobre o React no npm
-fetchPackageDetails('npm', 'react');
+    // Exibe apenas os itens filtrados
+    displayLanguages(filteredLanguages);
+}
 
+// Chama a função ao carregar a página
+fetchLanguageDetails();
 
 
 /* consumindo API noticias tecnologia  */
@@ -277,6 +342,7 @@ async function fetchTechNews() {
         `;
     }
 }
+
 
 // Chame a função ao carregar a página
 fetchTechNews();
@@ -408,80 +474,256 @@ form.addEventListener('submit', async (e) => {
     }
 });
 
-/* Api cotação em tempo  real dolar */
+let dollarChart;  // Variável global para armazenar o gráfico
+
+// Função para criar o gráfico
+function createDollarChart(data) {
+    const ctx = document.getElementById('dollarChart').getContext('2d');
+    
+    // Se o gráfico já existir, destrua o gráfico antigo antes de criar um novo
+    if (dollarChart) {
+        dollarChart.destroy();
+    }
+
+    console.log("Dados para o gráfico:", data); // Log dos dados que serão passados para o gráfico
+
+    dollarChart = new Chart(ctx, {
+        type: 'line',  // Tipo do gráfico (linha)
+        data: {
+            labels: data.labels,  // Datas/tempos
+            datasets: [{
+                label: 'Cotação do Dólar',
+                data: data.values,  // Valores da cotação
+                borderColor: '#2ecc71',  // Cor da linha
+                fill: false,  // Não preenche o gráfico
+                tension: 0.1  // Suaviza a linha
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Data'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Cotação (R$)'
+                    },
+                    beginAtZero: false
+                }
+            },
+            responsive: true
+        }
+    });
+}
+
+// Função para buscar a cotação do dólar e atualizar
 async function fetchDollarQuote() {
-    const url = 'https://api.exchangerate.host/convert?from=USD&to=BRL&amount=1&access_key=000664efd7127e5239fc06e92def081a';
-
     try {
-        const response = await fetch(url);
-        console.log("Status HTTP:", response.status);
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
+        const response = await fetch('https://v6.exchangerate-api.com/v6/YOUR_API_KEY/latest/USD');
         const data = await response.json();
-        console.log("Resposta da API:", data);
 
-        if (data && data.result) {
-            const usdToBRL = data.result;
-            document.getElementById("quote").innerText = `R$ ${usdToBRL.toFixed(2)}`;
-        } else {
-            throw new Error('Resposta inesperada da API.');
-        }
+        console.log("Resposta da API:", data); // Log para verificar a resposta da API
+
+        const quote = data.result;
+
+        // Arredonda o valor para 2 casas decimais
+        const roundedQuote = quote.toFixed(2);
+        
+        // Atualiza o texto da cotação
+        document.getElementById('quote').textContent = `R$ ${roundedQuote}`;
+        
+        // Dados para o gráfico (incluir valores históricos e a cotação atual)
+        const chartData = {
+            labels: ['2025-01-01', '2025-01-02', '2025-01-03', '2025-01-04', 'Agora'],
+            values: [5.2, 5.1, 5.3, 5.4, parseFloat(roundedQuote)]  // Inclui a cotação atual
+        };
+
+        // Cria o gráfico com os dados atualizados
+        createDollarChart(chartData);
     } catch (error) {
-        document.getElementById("quote").innerText = "Erro ao carregar a cotação.";
-        console.error("Erro ao buscar cotação:", error);
+        console.error("Erro ao obter a cotação:", error);
+        document.getElementById('quote').textContent = 'Erro ao carregar a cotação.';
     }
 }
 
-/* frontend comentarios 2 */
-document.getElementById('commentForm2').addEventListener('submit', async function (event) {
-    event.preventDefault(); // Impede o envio do formulário tradicional
 
-    const autor = document.getElementById('commentAuthor2').value;
-    const comentario = document.getElementById('commentText2').value;
+// Carrega a cotação assim que a página é carregada
+window.onload = fetchDollarQuote;
+
+
+/* busca public api */
+
+function filterAPIs() {
+    const query = document.getElementById('search-input').value.toLowerCase();
+    const apiElements = document.querySelectorAll('.api');
+    
+    apiElements.forEach(api => {
+        const title = api.querySelector('h3').textContent.toLowerCase();
+        if (title.includes(query)) {
+            api.style.display = 'block';
+        } else {
+            api.style.display = 'none';
+        }
+    });
+}
+
+// URL do backend
+const API_URL = 'http://localhost:3000';
+
+// Função para validar e prevenir XSS
+function sanitizeInput(input) {
+    console.log('Sanitizando entrada:', input);
+    const div = document.createElement('div');
+    div.textContent = input;
+    return div.innerHTML;
+}
+
+// Função de login para o modal
+document.getElementById('login-form-modal').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById('modal-email').value;
+    const password = document.getElementById('modal-password').value;
+
+    console.log('Tentativa de login com email:', email);
 
     try {
-        // Envia os dados para o backend
-        const response = await fetch('/add-comment', {
+        const response = await fetch(`${API_URL}/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            console.log('Login bem-sucedido. Token recebido:', data.token);
+            localStorage.setItem('token', data.token); // Armazena token JWT
+            document.getElementById('modal-login-message').textContent = 'Login realizado com sucesso!';
+        } else {
+            console.warn('Erro no login:', data);
+            document.getElementById('modal-login-message').textContent = 'Erro ao fazer login. Tente novamente.';
+        }
+    } catch (error) {
+        console.error('Erro ao fazer login:', error);
+        document.getElementById('modal-login-message').textContent = 'Erro de conexão. Tente novamente.';
+    }
+});
+
+// Função para carregar e exibir os comentários no modal
+async function carregarComentariosModal() {
+    console.log('Carregando comentários...');
+    try {
+        const response = await fetch(`${API_URL}/comentarios`);
+        const comentarios = await response.json();
+
+        console.log('Comentários recebidos:', comentarios);
+
+        const comentariosList = document.getElementById('modal-comments-list');
+        comentariosList.innerHTML = ''; // Limpa lista antes de adicionar novos
+
+        comentarios.forEach((comentario) => {
+            const div = document.createElement('div');
+            div.className = 'comment';
+            div.textContent = comentario.conteudo; // Sanitização feita no backend
+            comentariosList.appendChild(div);
+        });
+    } catch (error) {
+        console.error('Erro ao carregar comentários:', error);
+    }
+}
+
+// Função para enviar comentário no modal
+document.getElementById('modal-comment-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const comentario = document.getElementById('modal-comment').value;
+    const token = localStorage.getItem('token');
+
+    console.log('Tentativa de enviar comentário:', comentario);
+
+    if (!token) {
+        alert('Você precisa estar logado para comentar!');
+        console.warn('Comentário não enviado: usuário não está logado.');
+        return;
+    }
+
+    const comentarioSanitizado = sanitizeInput(comentario);
+    console.log('Comentário sanitizado:', comentarioSanitizado);
+
+    try {
+        const response = await fetch(`${API_URL}/comments`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ conteudo: comentarioSanitizado })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            console.log('Comentário publicado com sucesso.');
+            alert('Comentário publicado com sucesso!');
+            carregarComentariosModal(); // Recarregar comentários
+        } else {
+            console.warn('Erro ao publicar comentário:', data.error);
+            alert(data.error || 'Erro ao publicar comentário.');
+        }
+    } catch (error) {
+        console.error('Erro ao enviar comentário:', error);
+    }
+});
+
+// Carregar comentários quando o modal é aberto
+document.getElementById('myModal').addEventListener('shown.bs.modal', () => {
+    console.log('Modal aberto. Carregando comentários...');
+    carregarComentariosModal();
+});
+
+
+document.getElementById('login-form-modal').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById('modal-email').value;
+    const password = document.getElementById('modal-password').value;
+
+    console.log('Tentativa de login com email:', email);
+
+    try {
+        console.log('Enviando requisição para:', `${API_URL}/login`);
+        const response = await fetch(`${API_URL}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ autor, comentario })
+            body: JSON.stringify({ email, password }),
         });
 
+        console.log('Response status:', response.status);
+
         const data = await response.json();
-        if (data.message === "Comentário adicionado com sucesso!") {
-            alert(data.message);
-            loadComments(); // Carregar os comentários atualizados
+        console.log('Dados retornados pela API:', data);
+
+        if (response.ok) {
+            console.log('Login bem-sucedido. Token recebido:', data.token);
+            localStorage.setItem('token', data.token); // Armazena token JWT
+            document.getElementById('modal-login-message').textContent = 'Login realizado com sucesso!';
         } else {
-            alert(data.message);
+            console.warn('Erro no login:', data);
+            document.getElementById('modal-login-message').textContent = 'Erro ao fazer login. Tente novamente.';
         }
     } catch (error) {
-        alert("Erro ao enviar o comentário.");
+        console.error('Erro ao fazer login:', error);
+        document.getElementById('modal-login-message').textContent = 'Erro de conexão. Tente novamente.';
     }
 });
 
-// Função para carregar os comentários
-async function loadComments() {
-    try {
-        const response = await fetch('/get-comments');
-        const comments = await response.json();
 
-        const commentsList = document.getElementById('commentsList2');
-        commentsList.innerHTML = ''; // Limpa a lista antes de adicionar novos comentários
-
-        comments.forEach(comment => {
-            const div = document.createElement('div');
-            div.innerHTML = `<strong>${comment.autor}</strong>: <p>${comment.comentario}</p><small>${new Date(comment.data).toLocaleString()}</small>`;
-            commentsList.appendChild(div);
-        });
-    } catch (error) {
-        console.error("Erro ao carregar comentários:", error);
-    }
-}
-
-// Carrega os comentários ao carregar a página
-loadComments();
