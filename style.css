@@ -459,9 +459,15 @@ pre {
 
 
 
-
-
-
+.horizontal-grid{
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    gap: 20px;
+    width: 100%;
+    align-items: center;
+    
+}
 
 #dollar-quote {
     height: 45%;
@@ -631,15 +637,12 @@ canvas {
 
 }
 
-
 .tag-label {
     margin-top: 10px;
     margin: 10px;
     font-size: 1.3rem;
     font-family: 'Roboto', sans-serif;
 }
-
-
 
 .footer {
     width: 100%;
@@ -963,6 +966,7 @@ canvas {
 
 
 
+
 .comment-section {
     max-width: 600px;
     margin: 0 auto;
@@ -1038,6 +1042,8 @@ canvas {
     border-radius: 8px;
     border: 1px solid #ddd;
 }
+
+
 
 .form-input,
 .form-textarea {
@@ -1241,9 +1247,6 @@ main {
     color: white !important;
     /* Cor do texto quando a tag for selecionada */
 }
-
-
-
 
 /* api public  */
 #api-list {
@@ -1478,25 +1481,6 @@ h1 {
     font-family: 'Roboto', sans-serif;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* STYLE COMENTARIOS DENTRO DO MODAL LEMBRAR DE COLOCAR NO LOCAL DEVIDO POIS ESTA
 TOTALMENTE FORA DE LUGAR */
 .comment-item {
@@ -1600,4 +1584,59 @@ TOTALMENTE FORA DE LUGAR */
     box-shadow: 4px 4px 8px 0px rgb(124, 134, 125),
         inset -8px -8px 16px 0px rgba(47, 134, 20, 0.7),
         inset 0px 14px 28px 0px hsl(120deg 20% 95%);
+}
+
+/* Responsividade cookies */
+@media (max-width: 768px) {
+    .card {
+        width: 100%;
+        padding: 20px; 
+        border-radius: 20px; 
+    }
+
+    .card .title {
+        font-size: 1.6rem; 
+    }
+
+    .card .description {
+        font-size: 1rem; 
+    }
+
+    .card .prefs {
+        font-size: 1rem; 
+    }
+
+    .card button {
+        font-size: 1rem; 
+        padding: 15px; 
+    }
+
+    #cookie-banner {
+        display: block; 
+        width: 90%; 
+        transform: translateX(-50%); 
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        padding: 15px; 
+    }
+
+    .card .title {
+        font-size: 1.4rem; 
+    }
+
+    .card .description {
+        font-size: 0.9rem; 
+    }
+
+    .card .prefs {
+        font-size: 0.9rem; 
+    }
+
+    .card button {
+        font-size: 0.9rem; 
+        padding: 10px; 
+    }
 }
