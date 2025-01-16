@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
-    
+
     // Chama a função para carregar os posts
     fetchPosts();
 });
@@ -101,17 +101,90 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+/* mODAL PARA lOGIN DE USUARIOS */
+let modalVisible = false;
+
+function openModal() {
+    if (!modalVisible) {
+        document.getElementById("modal-overlay").style.display = "flex";
+        modalVisible = true;
+    }
+}
+
+function closeModal() {
+    if (modalVisible) {
+        document.getElementById("modal-overlay").style.display = "none";
+        modalVisible = false;
+    }
+}
+
+//Login modal usuário
+
+async function loginUser(event) {
+    event.preventDefault();
+
+    const email = document.querySelector('.input[type="email"]').value;
+    const password = document.querySelector('.input[type="password"]').value;
+
+    try {
+        const response = await fetch('http://localhost:3000/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert('Login realizado com sucesso!');
+            localStorage.setItem('token', data.token); // Salva o token no localStorage
+        } else {
+            alert(data.message);
+        }
+    } catch (error) {
+        console.error('Erro ao realizar login:', error);
+    }
+}
 
 
+//Proteção para rotas no fronend
+
+async function accessProtectedRoute() {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        alert('Você precisa fazer login primeiro!');
+        return;
+    }
+
+    const response = await fetch('http://localhost:3000/api/protected', {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+        console.log('Dados protegidos:', data);
+    } else {
+        alert(data.message);
+    }
+}
 
 
 /* Data e hora */
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 function updateDateTime() {
     const now = new Date();
 
-    // Obter data no formato "Dia da semana, DD/MM/AAAA"
+    // Obter data no formato "Dia da semana, DD de mês de AAAA"
     const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-    const currentDate = now.toLocaleDateString('pt-BR', options);
+    let currentDate = now.toLocaleDateString('pt-BR', options);
+
+    // Capitalizar a primeira letra de cada palavra
+    currentDate = currentDate.split(' ').map(word => capitalizeFirstLetter(word)).join(' ');
 
     // Obter hora no formato "HH:MM:SS"
     const currentTime = now.toLocaleTimeString('pt-BR', { hour12: false });
@@ -121,89 +194,82 @@ function updateDateTime() {
     document.getElementById('currentTime').textContent = currentTime;
 }
 
-// Atualizar data e hora a cada segundo
-setInterval(updateDateTime, 1000);
-
-// Atualizar data e hora ao carregar a página
+// Chamar a função para atualizar a data e hora
 updateDateTime();
 
 
 /* Clima tempo */
-
 // Substitua pela sua chave da API
 let chave = "95b21e4252bb169915cd54982dc75099";
+function colocarNaTela(dados) {
+    console.log(dados); // Verifique se os dados estão sendo retornados corretamente
 
-        function colocarNaTela(dados) {
-            console.log(dados); // Verifique se os dados estão sendo retornados corretamente
+    const descricaoTempo = dados.weather[0].description; // Exemplo: "nuvens dispersas"
+    const iconeClima = dados.weather[0].icon; // Exemplo: "04d"
 
-            const descricaoTempo = dados.weather[0].description; // Exemplo: "nuvens dispersas"
-            const iconeClima = dados.weather[0].icon; // Exemplo: "04d"
-            
-            console.log("Descrição do tempo:", descricaoTempo);
-            console.log("Ícone do clima:", iconeClima);
+    console.log("Descrição do tempo:", descricaoTempo);
+    console.log("Ícone do clima:", iconeClima);
 
-            // Exibe as informações da cidade
-            document.querySelector(".cidade").innerHTML = "Tempo em " + dados.name;
-            document.querySelector(".temp").innerHTML = Math.floor(dados.main.temp) + "°C";
-            
-            // Exibe a descrição detalhada do clima
-            document.querySelector(".text-previsao").innerHTML = descricaoTempo.charAt(0).toUpperCase() + descricaoTempo.slice(1);
-            
-            // Exibe o ícone do tempo
-            document.querySelector(".icone").src = `https://openweathermap.org/img/wn/${dados.weather[0].icon}.png`;
-            
-            // Exibe a umidade
-            document.querySelector(".umidade").innerHTML = dados.main.humidity + "% de umidade";
+    // Exibe as informações da cidade
+    document.querySelector(".cidade").innerHTML = "Tempo em " + dados.name;
+    document.querySelector(".temp").innerHTML = Math.floor(dados.main.temp) + "°C";
 
-            // Condicional para exibir a descrição detalhada do clima (nublado, chovendo, céu limpo)
-            let condicaoDetalhada = "";
-            if (descricaoTempo.includes("cloud")) {
-                condicaoDetalhada = "Nublado";
-            } else if (descricaoTempo.includes("rain")) {
-                condicaoDetalhada = "Chuvoso";
-            } else if (descricaoTempo.includes("clear")) {
-                condicaoDetalhada = "Céu Limpo";
-            } else {
-                condicaoDetalhada = descricaoTempo.charAt(0).toUpperCase() + descricaoTempo.slice(1);
-            }
-            document.querySelector(".condicao").innerHTML = condicaoDetalhada;
+    // Exibe a descrição detalhada do clima
+    document.querySelector(".text-previsao").innerHTML = descricaoTempo.charAt(0).toUpperCase() + descricaoTempo.slice(1);
+
+    // Exibe o ícone do tempo
+    document.querySelector(".icone").src = `https://openweathermap.org/img/wn/${dados.weather[0].icon}.png`;
+
+    // Exibe a umidade
+    document.querySelector(".umidade").innerHTML = dados.main.humidity + "% de umidade";
+
+    // Condicional para exibir a descrição detalhada do clima (nublado, chovendo, céu limpo)
+    let condicaoDetalhada = "";
+    if (descricaoTempo.includes("cloud")) {
+        condicaoDetalhada = "Nublado";
+    } else if (descricaoTempo.includes("rain")) {
+        condicaoDetalhada = "Chuvoso";
+    } else if (descricaoTempo.includes("clear")) {
+        condicaoDetalhada = "Céu Limpo";
+    } else {
+        condicaoDetalhada = descricaoTempo.charAt(0).toUpperCase() + descricaoTempo.slice(1);
+    }
+    document.querySelector(".condicao").innerHTML = condicaoDetalhada;
+}
+
+async function buscarCidade(cidade) {
+    try {
+        let dados = await fetch("https://api.openweathermap.org/data/2.5/weather?q=" +
+            cidade +
+            "&appid=" +
+            chave +
+            "&lang=pt_br" +
+            "&units=metric")
+            .then(resposta => resposta.json());
+
+        // Verifica se a cidade foi encontrada
+        if (dados.cod === "404") {
+            alert("Cidade não encontrada. Tente novamente.");
+        } else {
+            colocarNaTela(dados);
         }
+    } catch (error) {
+        alert("Erro ao buscar dados. Tente novamente.");
+    }
+}
 
-        async function buscarCidade(cidade) {
-            try {
-                let dados = await fetch("https://api.openweathermap.org/data/2.5/weather?q=" +
-                    cidade +
-                    "&appid=" +
-                    chave +
-                    "&lang=pt_br" +
-                    "&units=metric")
-                    .then(resposta => resposta.json());
-
-                // Verifica se a cidade foi encontrada
-                if (dados.cod === "404") {
-                    alert("Cidade não encontrada. Tente novamente.");
-                } else {
-                    colocarNaTela(dados);
-                }
-            } catch (error) {
-                alert("Erro ao buscar dados. Tente novamente.");
-            }
-        }
-
-        function cliqueiNoBotao() {
-            let cidade = document.querySelector(".input-cidade").value;
-            if (cidade) {
-                buscarCidade(cidade);
-            } else {
-                alert("Por favor, insira o nome da cidade.");
-            }
-        }
+function cliqueiNoBotao() {
+    let cidade = document.querySelector(".input-cidade").value;
+    if (cidade) {
+        buscarCidade(cidade);
+    } else {
+        alert("Por favor, insira o nome da cidade.");
+    }
+}
 
 // Função para buscar dados da API
-
-
 const languagesGrid = document.getElementById("languages-grid");
-let allLanguages = [5]; // Array para armazenar todos os dados retornados
+let allLanguages = [0]; // Array para armazenar todos os dados retornados
 
 // Função para buscar dados da API
 async function fetchLanguageDetails() {
@@ -260,9 +326,7 @@ function searchLanguage() {
 fetchLanguageDetails();
 
 
-/* consumindo API noticias tecnologia  */
-
-// Função para traduzir texto usando a API gratuita do Google Translate
+//consumindo API noticias tecnologia
 async function traduzirTexto(texto, targetLanguage = "pt") {
     const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLanguage}&dt=t&q=${encodeURIComponent(texto)}`;
 
@@ -274,10 +338,10 @@ async function traduzirTexto(texto, targetLanguage = "pt") {
         }
 
         const data = await response.json();
-        return data[0][0][0]; // Texto traduzido
+        return data[0][0][0];
     } catch (error) {
         console.error("Erro na tradução:", error.message);
-        return texto; // Retorna o texto original em caso de erro
+        return texto;
     }
 }
 
@@ -290,7 +354,7 @@ function formatarData(dataISO) {
 
 // Função para buscar notícias da API
 async function fetchTechNews() {
-    const apiKey = 'f309d331c4994735bce1f5c3fe2f9882'; // Substitua pela sua chave
+    const apiKey = 'f309d331c4994735bce1f5c3fe2f9882';
     const url = `https://newsapi.org/v2/top-headlines?category=technology&apiKey=${apiKey}`;
 
     try {
@@ -343,99 +407,180 @@ async function fetchTechNews() {
     }
 }
 
-
 // Chame a função ao carregar a página
 fetchTechNews();
 
+/* backend Conexão com o banco dados Post página principal */
+document.addEventListener("DOMContentLoaded", () => {
+    // Carrega comentários ao iniciar a página
+    loadComments();
+
+    // Configura evento para o formulário de envio de comentários
+    const commentForm = document.getElementById("commentForm");
+    commentForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        await submitComment();
+    });
+
+    // Carrega comentários ao abrir o modal
+    const modal = document.getElementById("myModal");
+    modal.addEventListener("show.bs.modal", loadComments);
+});
 
 
-/* backend Comentários   */
-async function fetchComments() {
-    const response = await fetch('http://localhost:3000/comments');
-    const comments = await response.json();
-    console.log('Comentários recebidos:', comments); // Verifique os dados recebidos
-    return comments;
+
+
+
+
+
+
+// Função para carregar comentários do backend
+async function loadComments() {
+    try {
+        const response = await fetch("http://localhost:3000/comments");
+        if (response.ok) {
+            const comments = await response.json();
+            displayComments(comments);
+        } else {
+            console.error("Erro ao carregar comentários do backend.");
+        }
+    } catch (error) {
+        console.error("Erro na conexão com o backend:", error);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Função para exibir os comentários no frontend
+function displayComments(comments) {
+    const commentsList = document.getElementById("commentsList");
+    const commentCounter = document.getElementById("comment-counter");
+
+    // Limpa os comentários anteriores
+    commentsList.innerHTML = "";
+
+    // Adiciona cada comentário à lista
+    comments.forEach((comment) => {
+        const commentItem = document.createElement("div");
+        commentItem.className = "comment-item";
+        commentItem.innerHTML = `
+            <p><strong>${comment.author}</strong>: ${comment.text}</p>
+        `;
+        commentsList.appendChild(commentItem);
+    });
+
+    // Atualiza o contador de comentários
+    commentCounter.textContent = `Comentários: ${comments.length}`;
+}
+
+// Função para enviar um comentário ao backend
+async function submitComment() {
+    const author = document.getElementById("commentAuthor").value;
+    const text = document.getElementById("commentText").value;
+
+    if (!author || !text) {
+        alert("Por favor, preencha todos os campos.");
+        return;
+    }
+
+    try {
+        const response = await fetch("http://localhost:3000/comments", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ author, text }),
+        });
+
+        if (response.ok) {
+            // Limpa os campos do formulário
+            document.getElementById("commentAuthor").value = "";
+            document.getElementById("commentText").value = "";
+
+            // Recarrega os comentários
+            await loadComments();
+        } else {
+            console.error("Erro ao enviar comentário para o backend.");
+        }
+    } catch (error) {
+        console.error("Erro na conexão com o backend:", error);
+    }
 }
 
 async function addComment(author, text) {
-    const response = await fetch('http://localhost:3000/comments', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ author, text })
-    });
-    const comment = await response.json();
-    return comment;
-}
-
-function displayComments(comments) {
-    const commentsList = document.getElementById('commentsList');
-    commentsList.innerHTML = ''; // Limpa os comentários anteriores
-
-    comments.forEach(comment => {
-        const commentElement = document.createElement('div');
-        commentElement.classList.add('comment');
-        commentElement.innerHTML = `<p class="comment-author">${comment.author}</p><p>${comment.text}</p>`;
-        commentsList.appendChild(commentElement);
-    });
-}
-
-window.onload = async function () {
-    const comments = await fetchComments();
-    displayComments(comments);
-};
-
-
-document.getElementById('commentForm').addEventListener('submit', async function (event) {
-    event.preventDefault();
-
-    const author = document.getElementById('commentAuthor').value;
-    const text = document.getElementById('commentText').value;
-
-    await addComment(author, text);
-
-    const comments = await fetchComments();
-    displayComments(comments);
-
-    document.getElementById('commentForm').reset();
-});
-
-window.onload = async function () {
-    const comments = await fetchComments();
-    displayComments(comments);
-};
-
-
-/* backend Conexão com o banco dados Post página principal */
-
-document.addEventListener("DOMContentLoaded", () => {
-    fetch("http://localhost:3000/comments")
-        .then(response => response.json())
-        .then(data => {
-            const postContainer = document.getElementById("post");
-            //postContainer.innerHTML = ""; // Limpa os posts anteriores
-
-            data.forEach(comment => {
-                // Cria os elementos para exibir o comentário
-                const postArticle = document.createElement("article");
-                postArticle.classList.add("post");
-
-                const titleElement = document.createElement("h2");
-                titleElement.classList.add("post-title");
-                titleElement.textContent = comment.author;
-
-                const textElement = document.createElement("p");
-                textElement.classList.add("post-text");
-                textElement.textContent = comment.text;
-
-                postArticle.appendChild(titleElement);
-                postArticle.appendChild(textElement);
-                postContainer.appendChild(postArticle);
+    if (author && text) {
+        try {
+            const response = await fetch("http://localhost:3002/comments", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ author, text }),
             });
-        })
-        .catch(err => console.error("Erro ao carregar comentários:", err));
-});
+
+            if (response.ok) {
+                const newComment = await response.json();
+
+                // Adicionar o comentário na lista com efeito
+                const commentItem = document.createElement("div");
+                commentItem.className = "comment-item";
+                commentItem.innerHTML = `
+                    <p><strong>${newComment.author}</strong>: ${newComment.text}</p>
+                `;
+
+                const commentsList = document.getElementById("commentsList");
+                commentsList.insertBefore(commentItem, commentsList.firstChild);
+
+                // Adicionar classe de destaque para o efeito
+                setTimeout(() => {
+                    commentItem.classList.add("highlight");
+                }, 10); // Pequeno atraso para ativar a transição
+
+                // Remover o destaque após alguns segundos
+                setTimeout(() => {
+                    commentItem.classList.remove("highlight");
+                }, 3000);
+
+                // Limpar o formulário
+                document.getElementById("commentAuthor").value = "";
+                document.getElementById("commentText").value = "";
+            } else {
+                console.error("Erro ao enviar comentário.");
+            }
+        } catch (error) {
+            console.error("Erro na conexão com o backend:", error);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Cadastro de email */
 const form = document.querySelector('#input_group');
@@ -479,7 +624,7 @@ let dollarChart;  // Variável global para armazenar o gráfico
 // Função para criar o gráfico
 function createDollarChart(data) {
     const ctx = document.getElementById('dollarChart').getContext('2d');
-    
+
     // Se o gráfico já existir, destrua o gráfico antigo antes de criar um novo
     if (dollarChart) {
         dollarChart.destroy();
@@ -532,10 +677,10 @@ async function fetchDollarQuote() {
 
         // Arredonda o valor para 2 casas decimais
         const roundedQuote = quote.toFixed(2);
-        
+
         // Atualiza o texto da cotação
         document.getElementById('quote').textContent = `R$ ${roundedQuote}`;
-        
+
         // Dados para o gráfico (incluir valores históricos e a cotação atual)
         const chartData = {
             labels: ['2025-01-01', '2025-01-02', '2025-01-03', '2025-01-04', 'Agora'],
@@ -560,7 +705,7 @@ window.onload = fetchDollarQuote;
 function filterAPIs() {
     const query = document.getElementById('search-input').value.toLowerCase();
     const apiElements = document.querySelectorAll('.api');
-    
+
     apiElements.forEach(api => {
         const title = api.querySelector('h3').textContent.toLowerCase();
         if (title.includes(query)) {
@@ -571,159 +716,39 @@ function filterAPIs() {
     });
 }
 
-// URL do backend
-const API_URL = 'http://localhost:3000';
 
-// Função para validar e prevenir XSS
-function sanitizeInput(input) {
-    console.log('Sanitizando entrada:', input);
-    const div = document.createElement('div');
-    div.textContent = input;
-    return div.innerHTML;
-}
+// controle de cookies
+document.addEventListener('DOMContentLoaded', function () {
+    const cookieBanner = document.getElementById('cookie-banner');
+    const acceptButton = document.getElementById('accept-cookies');
+    const declineButton = document.getElementById('decline-cookies');
 
-// Função de login para o modal
-document.getElementById('login-form-modal').addEventListener('submit', async (e) => {
-    e.preventDefault();
+    console.log("Script carregado");
 
-    const email = document.getElementById('modal-email').value;
-    const password = document.getElementById('modal-password').value;
+    // Verifica o consentimento salvo em localStorage
+    const cookieConsent = localStorage.getItem('cookieConsent');
 
-    console.log('Tentativa de login com email:', email);
-
-    try {
-        const response = await fetch(`${API_URL}/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, password })
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            console.log('Login bem-sucedido. Token recebido:', data.token);
-            localStorage.setItem('token', data.token); // Armazena token JWT
-            document.getElementById('modal-login-message').textContent = 'Login realizado com sucesso!';
-        } else {
-            console.warn('Erro no login:', data);
-            document.getElementById('modal-login-message').textContent = 'Erro ao fazer login. Tente novamente.';
-        }
-    } catch (error) {
-        console.error('Erro ao fazer login:', error);
-        document.getElementById('modal-login-message').textContent = 'Erro de conexão. Tente novamente.';
-    }
-});
-
-// Função para carregar e exibir os comentários no modal
-async function carregarComentariosModal() {
-    console.log('Carregando comentários...');
-    try {
-        const response = await fetch(`${API_URL}/comentarios`);
-        const comentarios = await response.json();
-
-        console.log('Comentários recebidos:', comentarios);
-
-        const comentariosList = document.getElementById('modal-comments-list');
-        comentariosList.innerHTML = ''; // Limpa lista antes de adicionar novos
-
-        comentarios.forEach((comentario) => {
-            const div = document.createElement('div');
-            div.className = 'comment';
-            div.textContent = comentario.conteudo; // Sanitização feita no backend
-            comentariosList.appendChild(div);
-        });
-    } catch (error) {
-        console.error('Erro ao carregar comentários:', error);
-    }
-}
-
-// Função para enviar comentário no modal
-document.getElementById('modal-comment-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const comentario = document.getElementById('modal-comment').value;
-    const token = localStorage.getItem('token');
-
-    console.log('Tentativa de enviar comentário:', comentario);
-
-    if (!token) {
-        alert('Você precisa estar logado para comentar!');
-        console.warn('Comentário não enviado: usuário não está logado.');
-        return;
+    // Exibe o banner após um delay se o consentimento ainda não foi dado
+    if (!cookieConsent) {
+        setTimeout(function () {
+            cookieBanner.style.display = "flex"; // Mostra o banner
+            console.log("Banner exibido após delay.");
+        }, 8000);
     }
 
-    const comentarioSanitizado = sanitizeInput(comentario);
-    console.log('Comentário sanitizado:', comentarioSanitizado);
+    // Aceitar cookies
+    acceptButton?.addEventListener('click', function () {
+        localStorage.setItem("cookieConsent", "accepted");
+        cookieBanner.style.display = "none"; // Oculta o banner
+        console.log("Cookies aceitos");
+    });
 
-    try {
-        const response = await fetch(`${API_URL}/comments`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ conteudo: comentarioSanitizado })
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            console.log('Comentário publicado com sucesso.');
-            alert('Comentário publicado com sucesso!');
-            carregarComentariosModal(); // Recarregar comentários
-        } else {
-            console.warn('Erro ao publicar comentário:', data.error);
-            alert(data.error || 'Erro ao publicar comentário.');
-        }
-    } catch (error) {
-        console.error('Erro ao enviar comentário:', error);
-    }
-});
-
-// Carregar comentários quando o modal é aberto
-document.getElementById('myModal').addEventListener('shown.bs.modal', () => {
-    console.log('Modal aberto. Carregando comentários...');
-    carregarComentariosModal();
-});
-
-
-document.getElementById('login-form-modal').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const email = document.getElementById('modal-email').value;
-    const password = document.getElementById('modal-password').value;
-
-    console.log('Tentativa de login com email:', email);
-
-    try {
-        console.log('Enviando requisição para:', `${API_URL}/login`);
-        const response = await fetch(`${API_URL}/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password }),
-        });
-
-        console.log('Response status:', response.status);
-
-        const data = await response.json();
-        console.log('Dados retornados pela API:', data);
-
-        if (response.ok) {
-            console.log('Login bem-sucedido. Token recebido:', data.token);
-            localStorage.setItem('token', data.token); // Armazena token JWT
-            document.getElementById('modal-login-message').textContent = 'Login realizado com sucesso!';
-        } else {
-            console.warn('Erro no login:', data);
-            document.getElementById('modal-login-message').textContent = 'Erro ao fazer login. Tente novamente.';
-        }
-    } catch (error) {
-        console.error('Erro ao fazer login:', error);
-        document.getElementById('modal-login-message').textContent = 'Erro de conexão. Tente novamente.';
-    }
+    // Recusar cookies
+    declineButton?.addEventListener('click', function () {
+        localStorage.setItem("cookieConsent", "declined");
+        cookieBanner.style.display = "none"; // Oculta o banner
+        console.log("Cookies recusados");
+    });
 });
 
 
