@@ -26,12 +26,11 @@
 
 /* Logotipo */
 .logo img {
-    max-width: 120px;
+    max-width: 250px;
     height: auto;
 }
 
 .logo:hover {
-
     transform: scale(1.2);
 }
 
@@ -90,6 +89,7 @@
     color: #fff;
     background-color: #007bff;
     border: none;
+    padding: 20px 25px;
 }
 
 .header-buttons .btn-signup:hover {
@@ -126,7 +126,7 @@
 }
 
 .p {
-    font-size: 1.5rem;
+    font-size: 2.8rem;
     padding: 10px;
     margin: 10px;
     gap: 20px;
@@ -524,8 +524,6 @@ canvas {
         grid-template-columns: 1fr;
     }
 }
-
-
 
 
 #weather-info p {
@@ -965,6 +963,61 @@ canvas {
 }
 
 
+/* Responsividade */
+@media (max-width: 768px) {
+    .form-container {
+        padding: 15px;
+    }
+
+    .title {
+        font-size: 1.5rem;
+    }
+
+    .sub-title {
+        font-size: 1rem;
+    }
+
+    .input {
+        font-size: 0.9rem;
+    }
+
+    .form-btn {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-container {
+        padding: 10px;
+    }
+
+    .title {
+        font-size: 1.3rem;
+    }
+
+    .sub-title {
+        font-size: 0.9rem;
+    }
+
+    .input {
+        font-size: 0.85rem;
+    }
+
+    .form-btn {
+        font-size: 0.85rem;
+    }
+
+    .apple-login-button,
+    .google-login-button {
+        font-size: 0.85rem;
+    }
+
+    .apple-login-button svg,
+    .google-login-button svg {
+        height: 1em;
+        width: 1em;
+    }
+}
 
 
 .comment-section {

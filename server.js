@@ -254,13 +254,9 @@ fetch("http://localhost:3000/comments")
     });
 
 
-// Iniciar o servidor
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
 
 
-// Exemplo: Definir um cookie na rota de login
+    // Exemplo: Definir um cookie na rota de login
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -299,3 +295,19 @@ app.get('/api/protected', (req, res) => {
       res.status(401).json({ message: 'Token inválido!' });
   }
 });
+
+/*
+export function handler(req, res) {
+  if (req.method === 'GET') {
+    res.status(200).json({ message: 'Hello from server.js!' });
+  } else {
+    res.status(405).json({ error: 'Method Not Allowed' });
+  }
+}
+*/
+// Iniciar o servidor
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});
+
+

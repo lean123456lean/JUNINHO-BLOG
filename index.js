@@ -194,8 +194,12 @@ function updateDateTime() {
     document.getElementById('currentTime').textContent = currentTime;
 }
 
-// Chamar a função para atualizar a data e hora
+// Atualizar a data e hora imediatamente
 updateDateTime();
+
+// Atualizar a data e hora a cada 1 segundo
+setInterval(updateDateTime, 1000);
+
 
 
 /* Clima tempo */
@@ -429,11 +433,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-
-
-
-
-
 // Função para carregar comentários do backend
 async function loadComments() {
     try {
@@ -448,17 +447,6 @@ async function loadComments() {
         console.error("Erro na conexão com o backend:", error);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 // Função para exibir os comentários no frontend
@@ -562,23 +550,6 @@ async function addComment(author, text) {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
