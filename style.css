@@ -16,28 +16,28 @@
 
 
 .typing-effect-container {
-    width: 80%;  /* Ajusta a largura para 80% da tela */
-    height: 100vh; /* Ou a altura total da tela, ou ajuste como necessário */
+    width: 70vw;  /* Contêiner com largura de 70% da tela */
+    height: 50vh; /* Contêiner com altura de 50% da tela */
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
     position: relative;
 }
-.typing-effect {
-    font-family: 'Orbitron', sans-serif;
-    font-size: clamp(1.5rem, 6vw, 4rem);
-    color: #01751e;
-    text-transform: uppercase;
-    white-space: nowrap;
-    overflow: hidden;
-    /*border-right: 4px solid #00ffff;*/
-    width: 100%;
-    max-width: 90vw; 
-    margin: 0 auto;
 
-    animation: blink 0.7s step-end infinite;
+.typing-effect {
+    font-size: clamp(1rem, 5vw, 3rem);  /* Ajuste automático do tamanho da fonte */
+    white-space: nowrap;
+    text-align: center;
+    overflow: hidden;
+    width: 100%;  /* Texto ocupa 100% da largura disponível */
+    max-width: 90%;  /* Limita a largura máxima do texto */
+    padding-top: 25px;
+    padding-bottom: 25px;
+    border-right: 2px solid transparent;
+    color: #02922d;
 }
+
 
 @keyframes blink {
     50% {
