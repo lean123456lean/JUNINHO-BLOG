@@ -11,7 +11,44 @@
     padding: 0;
     box-sizing: border-box;
     letter-spacing: 1px;
-    
+
+}
+
+.typing-effect {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2vw;
+    color: #01751e;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    /*border-right: 4px solid #00ffff;*/
+    width: 80%;
+    max-width: 40ch;
+    animation: blink 0.7s step-end infinite;
+}
+
+@keyframes blink {
+    50% {
+        border-color: transparent;
+    }
+}
+
+@media (max-width: 768px) {
+    .typing-effect {
+        font-size: 6vw;
+        /* Fonte maior para telas menores */
+        max-width: 30ch;
+        /* Reduz a largura máxima */
+    }
+}
+
+@media (max-width: 480px) {
+    .typing-effect {
+        font-size: 8vw;
+        /* Fonte ainda maior para telas muito pequenas */
+        max-width: 20ch;
+        /* Limita o texto em dispositivos menores */
+    }
 }
 
 /* Estilo geral do header */
@@ -31,7 +68,7 @@
 }
 
 .logo:hover {
-    transform: scale(1.2);
+    transform: scale(1.1);
 }
 
 
@@ -166,7 +203,7 @@ main {
 
 /* Estilo da data */
 .date-time-container h3 {
-    font-size: 1.9rem;
+    font-size: 1.4rem;
     color: #3498db;
     margin-bottom: 10px;
 }
@@ -459,14 +496,14 @@ pre {
 
 
 
-.horizontal-grid{
+.horizontal-grid {
     display: flex;
     justify-content: center;
     margin: auto;
     gap: 20px;
     width: 100%;
     align-items: center;
-    
+
 }
 
 #dollar-quote {
@@ -1550,11 +1587,18 @@ TOTALMENTE FORA DE LUGAR */
 
 /* cookies */
 #cookie-banner {
-    display: none; /* Escondido por padrão */
+    display: none;
+    width: 50%;
+    margin: 20px auto;
     position: fixed;
     bottom: 20px;
     left: 50%;
-    transform: translateX(-150%);
+    transform: translateX(0);
+    text-align: center;
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
     z-index: 1000;
 }
 
@@ -1611,16 +1655,16 @@ TOTALMENTE FORA DE LUGAR */
 .card .declinar {
     color: rgba(255, 0, 0);
     box-shadow: 4px 4px 8px 0px rgba(134, 124, 124);
-        inset: -8px -8px 16px 0px rgba(92, 92, 92, 0.7);
-        inset: 0px 14px 28px 0px hsl(120deg, 20% 95%);
+    inset: -8px -8px 16px 0px rgba(92, 92, 92, 0.7);
+    inset: 0px 14px 28px 0px hsl(120deg, 20% 95%);
 
 }
 
 .card .valid {
     color: rgba(0, 156, 0);
     box-shadow: 4px 4px 8px 0px rgba(134, 124, 124);
-        inset: -8px -8px 16px 0px rgba(92, 92, 92, 0.7);
-        inset: 0px 14px 28px 0px hsl(120deg, 20% 95%);
+    inset: -8px -8px 16px 0px rgba(92, 92, 92, 0.7);
+    inset: 0px 14px 28px 0px hsl(120deg, 20% 95%);
 }
 
 .card .declinar:hover {
@@ -1640,56 +1684,89 @@ TOTALMENTE FORA DE LUGAR */
 }
 
 /* Responsividade cookies */
-@media (max-width: 768px) {
+
+@media (max-width: 1920px) {
     .card {
-        width: 100%;
-        padding: 20px; 
-        border-radius: 20px; 
+        width: 50%;
+        padding: 20px;
+        border-radius: 20px;
     }
 
     .card .title {
-        font-size: 1.6rem; 
+        font-size: 1.6rem;
     }
 
     .card .description {
-        font-size: 1rem; 
+        font-size: 1rem;
     }
 
     .card .prefs {
-        font-size: 1rem; 
+        font-size: 1rem;
     }
 
     .card button {
-        font-size: 1rem; 
-        padding: 15px; 
+        font-size: 1rem;
+        padding: 15px;
     }
 
     #cookie-banner {
-        display: block; 
-        width: 90%; 
-        transform: translateX(-50%); 
+        display: block; /* Certifica que o banner aparece */
+        width: 90%;
+        transform: translateX(-50%);
+    }
+}
+
+
+@media (max-width: 768px) {
+    .card {
+        width: 100%;
+        padding: 20px;
+        border-radius: 20px;
+    }
+
+    .card .title {
+        font-size: 1.6rem;
+    }
+
+    .card .description {
+        font-size: 1rem;
+    }
+
+    .card .prefs {
+        font-size: 1rem;
+    }
+
+    .card button {
+        font-size: 1rem;
+        padding: 15px;
+    }
+
+    #cookie-banner {
+        display: block; /* Certifica que o banner aparece */
+        width: 90%;
+        transform: translateX(-50%);
     }
 }
 
 @media (max-width: 480px) {
     .card {
-        padding: 15px; 
+        padding: 15px;
     }
 
     .card .title {
-        font-size: 1.4rem; 
+        font-size: 1.4rem;
     }
 
     .card .description {
-        font-size: 0.9rem; 
+        font-size: 0.9rem;
     }
 
     .card .prefs {
-        font-size: 0.9rem; 
+        font-size: 0.9rem;
     }
 
     .card button {
-        font-size: 0.9rem; 
-        padding: 10px; 
+        font-size: 0.9rem;
+        padding: 10px;
     }
 }

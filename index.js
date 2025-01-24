@@ -2,6 +2,39 @@
 
 
 
+
+
+
+
+/* Título da pagina  */
+const textElement = document.getElementById('text');
+const texts = [
+    "Bem-vindo ao futuro da tecnologia.",
+    "Explore novas possibilidades.",
+    "Transforme ideias em realidade.",
+    "Inove, crie e inspire."
+]; // Array com várias frases
+let textIndex = 0;
+let charIndex = 0;
+
+function typeEffect() {
+    if (charIndex < texts[textIndex].length) {
+        textElement.textContent += texts[textIndex].charAt(charIndex);
+        charIndex++;
+        setTimeout(typeEffect, 100); // Velocidade de digitação
+    } else {
+        setTimeout(() => {
+            textElement.textContent = "";
+            charIndex = 0;
+            textIndex = (textIndex + 1) % texts.length; // Avança para a próxima frase
+            typeEffect();
+        }, 2000); // Pausa antes de exibir a próxima frase
+    }
+}
+
+typeEffect();
+
+
 // Evento de pesquisa
 document.getElementById("searchBar").addEventListener("input", function (e) {
     const query = e.target.value.toLowerCase();
@@ -123,8 +156,8 @@ function closeModal() {
 async function loginUser(event) {
     event.preventDefault();
 
-    const email = document.querySelector('.input[type="email"]').value;
-    const password = document.querySelector('.input[type="password"]').value;
+    const email = document.querySelector('#email').value;  // Alterado para pegar pelo ID
+    const password = document.querySelector('#password').value;  // Alterado para pegar pelo ID
 
     try {
         const response = await fetch('http://localhost:3000/api/login', {
@@ -145,6 +178,10 @@ async function loginUser(event) {
         console.error('Erro ao realizar login:', error);
     }
 }
+
+
+
+
 
 
 //Proteção para rotas no fronend
@@ -505,51 +542,7 @@ async function submitComment() {
     }
 }
 
-async function addComment(author, text) {
-    if (author && text) {
-        try {
-            const response = await fetch("http://localhost:3002/comments", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ author, text }),
-            });
 
-            if (response.ok) {
-                const newComment = await response.json();
-
-                // Adicionar o comentário na lista com efeito
-                const commentItem = document.createElement("div");
-                commentItem.className = "comment-item";
-                commentItem.innerHTML = `
-                    <p><strong>${newComment.author}</strong>: ${newComment.text}</p>
-                `;
-
-                const commentsList = document.getElementById("commentsList");
-                commentsList.insertBefore(commentItem, commentsList.firstChild);
-
-                // Adicionar classe de destaque para o efeito
-                setTimeout(() => {
-                    commentItem.classList.add("highlight");
-                }, 10); // Pequeno atraso para ativar a transição
-
-                // Remover o destaque após alguns segundos
-                setTimeout(() => {
-                    commentItem.classList.remove("highlight");
-                }, 3000);
-
-                // Limpar o formulário
-                document.getElementById("commentAuthor").value = "";
-                document.getElementById("commentText").value = "";
-            } else {
-                console.error("Erro ao enviar comentário.");
-            }
-        } catch (error) {
-            console.error("Erro na conexão com o backend:", error);
-        }
-    }
-}
 
 
 

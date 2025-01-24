@@ -63,6 +63,8 @@
         </nav>
         -->
 
+
+
             <!-- Botões ou links adicionais -->
             <div class="header-buttons">
                 <section-modal>
@@ -76,8 +78,7 @@
                                 <div class="form-container">
                                     <p class="title">Crie sua conta</p>
                                     <p class="sub-title">Seja Bem-vindo(a) ao Juninho Blog!</p>
-                                    <form class="form" onsubmit="loginUser(event)">
-                                        <!-- Adicione IDs para capturar os valores -->
+                                    <form class="form" onsubmit="registerUser(event)">
                                         <input type="email" id="email" class="input" placeholder="Email" required>
                                         <input type="password" id="password" class="input" placeholder="Crie uma senha"
                                             required>
@@ -131,7 +132,9 @@
     <div class="w3-content" style="max-width:1400px">
         <!-- Header -->
         <header class="w3-container w3-center w3-padding-32">
-            <p class="p">Transformando códigos em ideias<span class="w3-tag span">uma linha de cada vez</span></p>
+            <div class="typing-effect">
+                <span id="text"></span>
+            </div>
     </div>
     <section id="datetime">
         <div class="date-time-container">
@@ -273,7 +276,8 @@
     <!-- Blog entry -->
     <div data-aos="fade-up-right">
         <div class="w3-card-4 w3-margin w3-white">
-            <h1 style="display: flex; justify-content: center; padding: 20px; font-family: 'Roboto', sans-serif; font-size: 2.1rem; font-weight: 400;" class="w3-card-4 w3-margin w3-white">Notícias do mundo Dev.</h1>
+            <h1 style="display: flex; justify-content: center; padding: 20px; font-family: 'Roboto', sans-serif; font-size: 2.1rem; font-weight: 400;"
+                class="w3-card-4 w3-margin w3-white">Notícias do mundo Dev.</h1>
             <div>
                 <label class="tag-label" for="tag"></label>
                 <select id="tag">
@@ -294,69 +298,73 @@
     </div>
     </div>
     <!-- END BLOG ENTRIES -->
-    <div class="horizontal-grid">
-        <!-- Cotação do Dólar -->
-        <section id="dollar-quote" class="card">
-            <h2 class="dollar-title">Cotação do Dólar</h2>
-            <p id="quote">Carregando...</p>
-            <!--<button class="button-dolar" onclick="fetchDollarQuote()">Atualizar Cotação</button> -->
-        </section>
+    <div data-aos="fade-left">
+        <div class="horizontal-grid">
+            <!-- Cotação do Dólar -->
+            <section id="dollar-quote" class="card">
+                <h2 class="dollar-title">Cotação do Dólar</h2>
+                <p id="quote">Carregando...</p>
+                <!--<button class="button-dolar" onclick="fetchDollarQuote()">Atualizar Cotação</button> -->
+            </section>
 
-        <!-- Seção Extra -->
-        <section class="card">
-            <h2>Seção Extra</h2>
-            <p>Conteúdo adicional pode ser colocado aqui.</p>
-        </section>
+            <!-- Seção Extra -->
+            <section class="card">
+                <h2>Seção Extra</h2>
+                <p>Conteúdo adicional pode ser colocado aqui.</p>
+            </section>
 
-        <!-- Seção de Informações -->
-        <section class="card">
-            <h2>Informações</h2>
-            <p>Adicione suas informações aqui.</p>
-        </section>
+            <!-- Seção de Informações -->
+            <section class="card">
+                <h2>Informações</h2>
+                <p>Adicione suas informações aqui.</p>
+            </section>
+        </div>
     </div>
     </div>
     <hr>
-
-    <div class="w3-card w3-margin">
-        <div class="w3-container w3-padding">
-            <h4>Posts Populares</h4>
-        </div>
-        <hr>
-        <div class="w3-container">
-            <div class="popular-posts-grid" id="popular-posts">
-                <!-- Os posts serão carregados dinamicamente aqui -->
+    <div data-aos="zoom-in-down">
+        <div class="w3-card w3-margin">
+            <div class="w3-container w3-padding">
+                <h4>Posts Populares</h4>
+            </div>
+            <hr>
+            <div class="w3-container">
+                <div class="popular-posts-grid" id="popular-posts">
+                    <!-- Os posts serão carregados dinamicamente aqui -->
+                </div>
             </div>
         </div>
-    </div>
-    <hr>
-    <!-- Labels / tags -->
-    <section id="api-list">
-        <h2>APIs Públicas para Estudo</h2>
-        <p>Aqui você pode encontrar algumas APIs públicas gratuitas para estudar e integrar aos seus projetos.</p>
+        <hr>
+        <!-- Labels / tags -->
+        <div data-aos="zoom-out-right">
+            <section id="api-list">
+                <h2>APIs Públicas para Estudo</h2>
+                <p>Aqui você pode encontrar algumas APIs públicas gratuitas para estudar e integrar aos seus projetos.
+                </p>
 
-        <input type="text" id="search-input" placeholder="Pesquisar APIs..." oninput="filterAPIs()" />
+                <input type="text" id="search-input" placeholder="Pesquisar APIs..." oninput="filterAPIs()" />
 
-        <div class="api-grid">
-            <div class="api">
-                <h3>1. JokeAPI (Piadas de Programação)</h3>
-                <p>Fornece piadas de programação para usar em projetos ou apenas para descontrair.</p>
-                <a href="https://jokeapi.dev/" target="_blank">Visite a JokeAPI</a>
-                <p><strong>Exemplo de uso:</strong></p>
-                <pre>
+                <div class="api-grid">
+                    <div class="api">
+                        <h3>1. JokeAPI (Piadas de Programação)</h3>
+                        <p>Fornece piadas de programação para usar em projetos ou apenas para descontrair.</p>
+                        <a href="https://jokeapi.dev/" target="_blank">Visite a JokeAPI</a>
+                        <p><strong>Exemplo de uso:</strong></p>
+                        <pre>
         fetch('https://v2.jokeapi.dev/joke/Programming?type=single')
             .then(response => response.json())
             .then(data => {
                 console.log(data.joke);
             });
                     </pre>
-            </div>
+                    </div>
 
-            <div class="api">
-                <h3>2. OpenWeatherMap (Clima)</h3>
-                <p>Obtenha informações sobre o clima em qualquer cidade ao redor do mundo.</p>
-                <a href="https://openweathermap.org/" target="_blank">Visite o OpenWeatherMap</a>
-                <p><strong>Exemplo de uso:</strong></p>
-                <pre>
+                    <div class="api">
+                        <h3>2. OpenWeatherMap (Clima)</h3>
+                        <p>Obtenha informações sobre o clima em qualquer cidade ao redor do mundo.</p>
+                        <a href="https://openweathermap.org/" target="_blank">Visite o OpenWeatherMap</a>
+                        <p><strong>Exemplo de uso:</strong></p>
+                        <pre>
         const apiKey = 'SUA_CHAVE_AQUI';
         const city = 'São Paulo';
         const url = \`https://api.openweathermap.org/data/2.5/weather?q=\${city}&appid=\${apiKey}&units=metric&lang=pt_br\`;
@@ -367,44 +375,48 @@
                 console.log(\`Tempo em \${city}: \${data.weather[0].description}\`);
             });
                     </pre>
-            </div>
+                    </div>
 
-            <div class="api">
-                <h3>3. Stack Exchange API (Perguntas e Respostas)</h3>
-                <p>Permite buscar perguntas e respostas do Stack Overflow e outros sites da rede Stack Exchange.</p>
-                <a href="https://api.stackexchange.com/" target="_blank">Visite a Stack Exchange API</a>
-                <p><strong>Exemplo de uso:</strong></p>
-                <pre>
+                    <div class="api">
+                        <h3>3. Stack Exchange API (Perguntas e Respostas)</h3>
+                        <p>Permite buscar perguntas e respostas do Stack Overflow e outros sites da rede Stack Exchange.
+                        </p>
+                        <a href="https://api.stackexchange.com/" target="_blank">Visite a Stack Exchange API</a>
+                        <p><strong>Exemplo de uso:</strong></p>
+                        <pre>
         fetch('https://api.stackexchange.com/2.3/questions?order=desc&sort=activity&tagged=javascript&site=stackoverflow')
             .then(response => response.json())
             .then(data => {
                 console.log(data.items[0].title); // Exibe o título da primeira pergunta
             });
                     </pre>
-            </div>
+                    </div>
+                </div>
         </div>
+    </div>
     </section>
 
     <!-- END Introduction Menu -->
     </div>
     </div><br>
+    <div data-aos="zoom-out-down">
+        <hr>
+        <section>
+            <h1 style="text-align: center;">Linguagens de Programação</h1>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Digite uma linguagem para buscar..." />
+                <button onclick="searchLanguage()">
+                    <img src="https://www.svgrepo.com/show/488200/find.svg" alt="Buscar" class="search-icon">
+                </button>
+            </div>
+            <div class="container" id="languages-grid">
+                <!-- Conteúdo preenchido dinamicamente via JavaScript -->
+            </div>
+        </section>
+        <hr>
 
-    <hr>
-    <section>
-        <h1 style="text-align: center;">Linguagens de Programação</h1>
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Digite uma linguagem para buscar..." />
-            <button onclick="searchLanguage()">
-                <img src="https://www.svgrepo.com/show/488200/find.svg" alt="Buscar" class="search-icon">
-            </button>
-        </div>
-        <div class="container" id="languages-grid">
-            <!-- Conteúdo preenchido dinamicamente via JavaScript -->
-        </div>
-    </section>
-    <hr>
-
-    <!-- END w3-content -->
+        <!-- END w3-content -->
+    </div>
     </div>
 
     <!-- Footer -->

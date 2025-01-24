@@ -13,16 +13,18 @@ require('dotenv').config();
 
 const app = express();
 const PORT = 3000;
-require('dotenv').config(); // Carrega as variáveis de ambiente do arquivo .env
 
 // Acessando a variável de ambiente
 const apiKey = process.env.API_KEY;
 const apiSecret = process.env.API_SECRET;
 
 console.log('API Key:', apiKey);  // Isso agora deve funcionar
+
 app.use(cors({
   origin: 'https://lean123456lean.github.io/JUNINHO-BLOG/',
   origin: 'http://127.0.0.1:5503',
+  methods: 'GET,POST,PUT,DELETE',
+  credentials: true, 
 }));
 
 // Configuração dos Middlewares
@@ -256,29 +258,55 @@ fetch("http://localhost:3000/comments")
 
 
 
+    
+    
     // Exemplo: Definir um cookie na rota de login
-app.post('/api/login', async (req, res) => {
-  const { email, password } = req.body;
+    app.post('/api/login', async (req, res) => {
+      const { email, password } = req.body;
+  
+      if (!email || !password) {
+          return res.status(400).json({ message: 'Email e senha são obrigatórios!' });
+      }
+  
+      const user = users.find((u) => u.email === email);
+      if (!user) {
+          return res.status(404).json({ message: 'Usuário não encontrado!' });
+      }
+  
+      const isPasswordCorrect = await bcrypt.compare(password, user.password);
+      if (!isPasswordCorrect) {
+          return res.status(401).json({ message: 'Senha incorreta!' });
+      }
+  
+      const token = jwt.sign({ email: user.email }, secretKey, { expiresIn: '1h' });
+      res.status(200).json({ message: 'Login bem-sucedido!', token });
+  });
 
-  if (!email || !password) {
-      return res.status(400).json({ message: 'Email e senha são obrigatórios!' });
-  }
+  
+  
 
-  const user = users.find((u) => u.email === email);
-  if (!user) {
-      return res.status(404).json({ message: 'Usuário não encontrado!' });
-  }
+     //Rota de registro usuários 
+  app.post('/api/register', async (req, res) => {
+    const { email, password } = req.body;
 
-  const isPasswordCorrect = await bcrypt.compare(password, user.password);
-  if (!isPasswordCorrect) {
-      return res.status(401).json({ message: 'Senha incorreta!' });
-  }
+    if (!email || !password) {
+        return res.status(400).json({ message: 'Email e senha são obrigatórios!' });
+    }
 
-  // Gerar um token e definir como cookie
-  const token = jwt.sign({ email: user.email }, secretKey, { expiresIn: '1h' });
-  res.cookie('authToken', token, { httpOnly: true, maxAge: 3600000 }); // 1 hora
-  res.status(200).json({ message: 'Login bem-sucedido!' });
+    const existingUser = users.find((u) => u.email === email);
+    if (existingUser) {
+        return res.status(400).json({ message: 'Email já cadastrado!' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10); // Criptografa a senha
+    const newUser = { email, password: hashedPassword };  // Cria o novo usuário
+    users.push(newUser);  // Adiciona à lista de usuários
+    console.log('Novo usuário registrado:', email);  // Debug para conferir
+
+    res.status(201).json({ message: 'Usuário registrado com sucesso!' });
 });
+
+
 
 // Exemplo: Rota protegida que verifica o cookie
 app.get('/api/protected', (req, res) => {
@@ -295,6 +323,11 @@ app.get('/api/protected', (req, res) => {
       res.status(401).json({ message: 'Token inválido!' });
   }
 });
+
+
+
+
+
 
 /*
 export function handler(req, res) {
