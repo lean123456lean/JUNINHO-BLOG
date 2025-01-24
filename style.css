@@ -14,16 +14,28 @@
 
 }
 
+
+.typing-effect-container {
+    width: 80%;  /* Ajusta a largura para 80% da tela */
+    height: 100vh; /* Ou a altura total da tela, ou ajuste como necessário */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
 .typing-effect {
     font-family: 'Orbitron', sans-serif;
-    font-size: 2vw;
+    font-size: clamp(1.5rem, 6vw, 4rem);
     color: #01751e;
     text-transform: uppercase;
     white-space: nowrap;
     overflow: hidden;
     /*border-right: 4px solid #00ffff;*/
-    width: 80%;
-    max-width: 40ch;
+    width: 100%;
+    max-width: 90vw; 
+    margin: 0 auto;
+
     animation: blink 0.7s step-end infinite;
 }
 
@@ -35,22 +47,17 @@
 
 @media (max-width: 768px) {
     .typing-effect {
-        font-size: 6vw;
-        /* Fonte maior para telas menores */
-        max-width: 30ch;
-        /* Reduz a largura máxima */
+        font-size: clamp(1.5rem, 7vw, 3.5rem); /* Ajuste maior para telas médias */
+        max-width: 100%;  /* Garante que o texto ocupe até 100% da largura disponível */
     }
 }
 
 @media (max-width: 480px) {
     .typing-effect {
-        font-size: 8vw;
-        /* Fonte ainda maior para telas muito pequenas */
-        max-width: 20ch;
-        /* Limita o texto em dispositivos menores */
+        font-size: clamp(1.5rem, 8vw, 1rem); /* Fonte maior para dispositivos muito pequenos */
+        max-width: 100%;  /* Garante que o texto ocupe 100% da largura disponível */
     }
 }
-
 /* Estilo geral do header */
 .header {
     display: flex;
