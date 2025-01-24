@@ -4,7 +4,7 @@
 
 
 
-
+   
 
 /* Título da pagina  */
 const textElement = document.getElementById('text');
@@ -397,6 +397,8 @@ function formatarData(dataISO) {
 async function fetchTechNews() {
     const apiKey = 'f309d331c4994735bce1f5c3fe2f9882';
     const url = `https://newsapi.org/v2/top-headlines?category=technology&apiKey=${apiKey}`;
+    
+    
 
     try {
         const response = await fetch(url);

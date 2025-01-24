@@ -21,8 +21,7 @@ const apiSecret = process.env.API_SECRET;
 console.log('API Key:', apiKey);  // Isso agora deve funcionar
 
 app.use(cors({
-  origin: 'https://lean123456lean.github.io/JUNINHO-BLOG/',
-  origin: 'http://127.0.0.1:5503',
+  origin: ["https://lean123456lean.github.io", "http://127.0.0.1:5503"],
   methods: 'GET,POST,PUT,DELETE',
   credentials: true, 
 }));
@@ -99,6 +98,7 @@ db.serialize(() => {
     }
   );
 });
+
 
 // Simulação de banco de dados
 const users = [];
@@ -283,7 +283,7 @@ fetch("http://localhost:3000/comments")
   });
 
   
-  
+
 
      //Rota de registro usuários 
   app.post('/api/register', async (req, res) => {
@@ -322,6 +322,16 @@ app.get('/api/protected', (req, res) => {
   } catch (error) {
       res.status(401).json({ message: 'Token inválido!' });
   }
+});
+
+
+app.get('/tech-news', async (req, res) => {
+    try {
+        const response = await axios.get(`https://newsapi.org/v2/top-headlines?category=technology&apiKey=${apiKey}`);
+        res.json(response.data);
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao obter notícias' });
+    }
 });
 
 
