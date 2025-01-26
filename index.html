@@ -13,7 +13,7 @@
     <meta property="og:description"
         content="Aprenda as melhores práticas de React Native para criar apps eficientes e escaláveis. Confira as dicas no Juninho Blog!">
     <meta property="og:type" content="article">
-    <link rel="icon" href="./assets/src/favicon.png" type="image/x-icon">
+    <link rel="icon" href="./assets/src/logo-favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
@@ -46,6 +46,24 @@
 </head>
 
 <body class="w3-light-grey">
+    <div id="loading-spinner">
+        <div class="loading">
+            <div class="loading-wide">
+                <div class="l1 color"></div>
+                <div class="l2 color"></div>
+                <div class="e1 color animation-effect-light"></div>
+                <div class="e2 color animation-effect-light-d"></div>
+                <div class="e3 animation-effect-rot">X</div>
+                <div class="e4 color animation-effect-light"></div>
+                <div class="e5 color animation-effect-light-d"></div>
+                <div class="e6 animation-effect-scale">*</div>
+                <div class="e7 color"></div>
+                <div class="e8 color"></div>
+            </div>
+        </div>
+    </div>
+
+
     <div data-aos="fade-up" data-aos-duration="3000" class="logo">
         <header class="header">
             <div class="logo">
@@ -143,6 +161,7 @@
         </div>
     </section>
     </div>
+
     <section class="search" id="search">
         <div data-aos="fade-up" data-aos-anchor-placement="top-bottom">
             <div class="w3-padding w3-xlarge w3-text-blue">
@@ -423,6 +442,9 @@
     <footer class="w3-container w3-dark-grey w3-padding-32 w3-margin-top">
         <div id="footer_content">
             <div id="footer_contacts">
+                <div class="logo-footer">
+                    <img class="footer-logo" src="./assets/src/favicon.png" alt="logo-favicon">
+                </div>
                 <section>
                     <div class="container-rede-social">
                         <div id="footer_social_media">
@@ -440,50 +462,50 @@
                         </div>
                     </div>
                 </section>
-                <img class="footer-logo" src="./assets/src/favicon.png" alt="logo-favicon">
 
             </div>
+            <div class="footer-list-container">
+                <ul class="footer-list">
+                    <li>
+                        <h3>Blog</h3>
+                    </li>
+                    <li>
+                        <a href="https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox" class="footer-link">E-mail</a>
+                    </li>
+                    <li>
+                        <a href="https://www.freecodecamp.org/portuguese/news/os-10-sites-da-web-mais-populares-com-desafios-de-programacao/"
+                            class="footer-link">Onde praticar programação</a>
+                    </li>
+                    <li>
+                        <a href="https://www.youtube.com/playlist?list=PLXx8PbU9q6fkDPW9DcOBWruPrhGmfR6cF"
+                            class="footer-link">Musicas</a>
+                    </li>
+                </ul>
 
-            <ul class="footer-list">
-                <li>
-                    <h3>Blog</h3>
-                </li>
-                <li>
-                    <a href="https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox" class="footer-link">E-mail</a>
-                </li>
-                <li>
-                    <a href="https://www.freecodecamp.org/portuguese/news/os-10-sites-da-web-mais-populares-com-desafios-de-programacao/"
-                        class="footer-link">Onde praticar programação</a>
-                </li>
-                <li>
-                    <a href="https://www.youtube.com/playlist?list=PLXx8PbU9q6fkDPW9DcOBWruPrhGmfR6cF"
-                        class="footer-link">Musicas</a>
-                </li>
-            </ul>
+                <ul class="footer-list">
+                    <li>
+                        <h3>Produtos</h3>
+                    </li>
+                    <li>
+                        <a href="#" class="footer-link">Sobre</a>
+                    </li>
+                    <li>
+                        <a href="https://g1.globo.com/tecnologia/" class="footer-link">Noticias</a>
+                    </li>
+                    <li>
+                        <a href="https://www.w3schools.com/w3css/w3css_templates.asp" class="footer-link">w3schools</a>
+                    </li>
 
-            <ul class="footer-list">
-                <li>
-                    <h3>Produtos</h3>
-                </li>
-                <li>
-                    <a href="#" class="footer-link">Sobre</a>
-                </li>
-                <li>
-                    <a href="https://g1.globo.com/tecnologia/" class="footer-link">Noticias</a>
-                </li>
-                <li>
-                    <a href="https://www.w3schools.com/w3css/w3css_templates.asp" class="footer-link">w3schools</a>
-                </li>
-
-                <li>
-                    <a href="https://github.com/lean123456lean" class="footer-link">Visite nosso repositório GitHub</a>
-                </li>
-            </ul>
+                    <li>
+                        <a href="https://github.com/lean123456lean" class="footer-link">Visite nosso repositório
+                            GitHub</a>
+                    </li>
+                </ul>
+            </div>
 
 
             <div id="footer_subscribe">
                 <h3>Subscrever</h3>
-
                 <p>
                     Digite seu e-mail para ser notificado sobre nossas Soluções de Notícias.
                 </p>

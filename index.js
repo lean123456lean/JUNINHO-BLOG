@@ -1,12 +1,17 @@
 
 
+/* Spinner da página */
+document.addEventListener("DOMContentLoaded", () => {
+    const spinner = document.getElementById("loading-spinner");
+    const content = document.getElementById("content");
 
-
-
-
-   
-
-/* Título da pagina  */
+    // Simula o carregamento de dados (use fetch ou outro método para chamadas reais)
+    setTimeout(() => {
+        spinner.style.display = "none"; // Esconde o spinner
+        content.style.display = "block"; // Mostra o conteúdo
+    }, 3000); // Ajuste o tempo conforme necessário
+});
+/* Título da página  */
 const textElement = document.getElementById('text');
 const texts = [
     "Bem-vindo ao futuro da tecnologia.",
@@ -36,20 +41,29 @@ typeEffect();
 
 
 // Evento de pesquisa
-document.getElementById("searchBar").addEventListener("input", function (e) {
-    const query = e.target.value.toLowerCase();
-    const posts = document.querySelectorAll(".post");
 
-    posts.forEach(post => {
-        const title = post.querySelector(".post-title").textContent.toLowerCase();
-        if (title.includes(query)) {
-            post.style.display = "block"; // Mostra o post
-        } else {
-            post.style.display = "none"; // Esconde o post
-        }
-    });
-    console.log("O arquivo script.js foi carregado com sucesso!");
+document.addEventListener("DOMContentLoaded", function () {
+    const searchBar = document.getElementById("searchBar");
+
+    if (searchBar) {
+        searchBar.addEventListener("input", function (e) {
+            const query = e.target.value.toLowerCase();
+            const posts = document.querySelectorAll(".post");
+
+            posts.forEach(post => {
+                const title = post.querySelector(".post-title").textContent.toLowerCase();
+                if (title.includes(query)) {
+                    post.style.display = "block"; // Mostra o post
+                } else {
+                    post.style.display = "none"; // Esconde o post
+                }
+            });
+        });
+    } else {
+        console.log("Elemento com id 'searchBar' não encontrado.");
+    }
 });
+
 
 
 // usso da api para atualizar post populares da página
@@ -397,8 +411,8 @@ function formatarData(dataISO) {
 async function fetchTechNews() {
     const apiKey = 'f309d331c4994735bce1f5c3fe2f9882';
     const url = `https://newsapi.org/v2/top-headlines?category=technology&apiKey=${apiKey}`;
-    
-    
+
+
 
     try {
         const response = await fetch(url);
