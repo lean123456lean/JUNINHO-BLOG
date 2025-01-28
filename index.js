@@ -18,7 +18,7 @@ const texts = [
     "Explore novas possibilidades.",
     "Transforme ideias em realidade.",
     "Inove, crie e inspire."
-]; // Array com várias frases
+];
 let textIndex = 0;
 let charIndex = 0;
 
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-/* mODAL PARA lOGIN DE USUARIOS */
+/* MODAL PARA lOGIN DE USUARIOS */
 let modalVisible = false;
 
 function openModal() {
@@ -558,10 +558,6 @@ async function submitComment() {
     }
 }
 
-
-
-
-
 /* Cadastro de email */
 const form = document.querySelector('#input_group');
 const emailInput = document.querySelector('#email');
@@ -697,7 +693,6 @@ function filterAPIs() {
 }
 
 
-// controle de cookies
 document.addEventListener('DOMContentLoaded', function () {
     const cookieBanner = document.getElementById('cookie-banner');
     const acceptButton = document.getElementById('accept-cookies');
@@ -705,30 +700,33 @@ document.addEventListener('DOMContentLoaded', function () {
 
     console.log("Script carregado");
 
-    // Verifica o consentimento salvo em localStorage
+    // Verifica se o consentimento já foi dado
     const cookieConsent = localStorage.getItem('cookieConsent');
+    console.log("Consentimento atual:", cookieConsent);
 
-    // Exibe o banner após um delay se o consentimento ainda não foi dado
     if (!cookieConsent) {
+        // Exibe o banner com delay se ainda não foi dado consentimento
         setTimeout(function () {
-            cookieBanner.style.display = "flex"; // Mostra o banner
-            console.log("Banner exibido após delay.");
-        }, 8000);
+            cookieBanner.style.display = "flex";
+            console.log("Banner exibido.");
+        }, 5000);
+    } else {
+        // Oculta o banner caso o consentimento já tenha sido dado
+        cookieBanner.style.display = "none";
+        console.log("Consentimento já registrado. Banner não exibido.");
     }
 
     // Aceitar cookies
     acceptButton?.addEventListener('click', function () {
-        localStorage.setItem("cookieConsent", "accepted");
-        cookieBanner.style.display = "none"; // Oculta o banner
-        console.log("Cookies aceitos");
+        localStorage.setItem('cookieConsent', 'accepted');
+        cookieBanner.style.display = "none";
+        console.log("Cookies aceitos. Banner ocultado.");
     });
 
     // Recusar cookies
     declineButton?.addEventListener('click', function () {
-        localStorage.setItem("cookieConsent", "declined");
-        cookieBanner.style.display = "none"; // Oculta o banner
-        console.log("Cookies recusados");
+        localStorage.setItem('cookieConsent', 'declined');
+        cookieBanner.style.display = "none";
+        console.log("Cookies recusados. Banner ocultado.");
     });
 });
-
-

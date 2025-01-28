@@ -64,6 +64,29 @@
     </div>
 
 
+    <section>
+        <div id="cookie-banner">
+            <div class="card">
+                <span class="title">🍪 Aviso de cookies</span>
+                <p class="description">Usamos cookies para garantir que você tenha a melhor experiência em nosso site..
+                    <a href="./politicas.html">Leia as políticas de cookies</a>.
+                </p>
+                <a href="./gerencarpoliticas.html" class="prefs">
+                    Gerenciar preferências
+                </a>
+                <div class="actions">
+                    <button id="decline-cookies" class="declinar">
+                        Recusar
+                    </button>
+                    <button id="accept-cookies" class="valid">
+                        Aceito
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
     <div data-aos="fade-up" data-aos-duration="3000" class="logo">
         <header class="header">
             <div class="logo">
@@ -87,7 +110,7 @@
             <div class="header-buttons">
                 <section-modal>
                     <div class="container-modal">
-                        <a class="btn-signup" onclick="openModal()">Login</a>
+                        <a class="btn-signup" onclick="openModal()"  aria-label="Abrir modal de login">Login</a>
                         <div id="modal-overlay" onclick="closeModal()">
                             <div id="box" onclick="event.stopPropagation()">
 
@@ -294,7 +317,7 @@
     <hr>
     <!-- Blog entry -->
     <div data-aos="fade-up-right">
-        <div class="w3-card-4 w3-margin w3-white">
+        <div style="padding-top: 25px;" class="w3-card-4 w3-margin w3-white">
             <h1 style="display: flex; justify-content: center; padding: 20px; font-family: 'Roboto', sans-serif; font-size: 2.1rem; font-weight: 400;"
                 class="w3-card-4 w3-margin w3-white">Notícias do mundo Dev.</h1>
             <div>
@@ -417,9 +440,10 @@
 
     <!-- END Introduction Menu -->
     </div>
-    </div><br>
+    </div>
+    <br>
+    <hr>
     <div data-aos="zoom-out-down">
-        <hr>
         <section>
             <h1 style="text-align: center;">Linguagens de Programação</h1>
             <div class="search-bar">
@@ -433,11 +457,9 @@
             </div>
         </section>
         <hr>
-
         <!-- END w3-content -->
     </div>
     </div>
-
     <!-- Footer -->
     <footer class="w3-container w3-dark-grey w3-padding-32 w3-margin-top">
         <div id="footer_content">
@@ -524,27 +546,6 @@
             2024 Todos os direitos reservados JUNINHO BLOG
         </div>
     </footer>
-    <section-cookies>
-        <div id="cookie-banner">
-            <div class="card">
-                <span class="title">🍪 Aviso de cookies</span>
-                <p class="description">Usamos cookies para garantir que você tenha a melhor experiência em nosso site..
-                    <a href="./politicas.html">Leia as políticas de cookies</a>.
-                </p>
-                <a href="./gerencarpoliticas.html" class="prefs">
-                    Gerenciar preferências
-                </a>
-                <div class="actions">
-                    <button id="decline-cookies" class="declinar">
-                        Recusar
-                    </button>
-                    <button id="accept-cookies" class="valid">
-                        Aceito
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section-cookies>
     <script src="index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
