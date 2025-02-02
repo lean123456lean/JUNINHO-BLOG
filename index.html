@@ -42,6 +42,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
 </head>
 
@@ -87,88 +88,50 @@
     </section>
 
 
-    <div data-aos="fade-up" data-aos-duration="3000" class="logo">
-        <header class="header">
-            <div class="logo">
-                <img src="./assets/src/logo.png" alt="Logo da Empresa" />
-            </div>
+    <header class="header" data-aos="fade-up" data-aos-duration="3000">
+        <div class="logo">
+            <img src="./assets/src/logo.png" alt="Logo da Empresa">
+        </div>
 
-            <!-- Menu de navegação 
         <nav class="nav-menu">
+            <div class="user-icon" style="display: none;">
+                <img class="user-icon" src="./assets/src/user-icon.png" alt="Ícone do Usuário">
+            </div>
             <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">Sobre</a></li>
-                <li><a href="#services">Serviços</a></li>
-                <li><a href="#contact">Contato</a></li>
+                <li><a href="#" onclick="openModal()">Login</a></li>
             </ul>
         </nav>
-        -->
-
-
-
-            <!-- Botões ou links adicionais -->
-            <div class="header-buttons">
-                <section-modal>
-                    <div class="container-modal">
-                        <a class="btn-signup" onclick="openModal()"  aria-label="Abrir modal de login">Login</a>
-                        <div id="modal-overlay" onclick="closeModal()">
-                            <div id="box" onclick="event.stopPropagation()">
-
-                                <h1>Faça seu login</h1>
-
-                                <div class="form-container">
-                                    <p class="title">Crie sua conta</p>
-                                    <p class="sub-title">Seja Bem-vindo(a) ao Juninho Blog!</p>
-                                    <form class="form" onsubmit="registerUser(event)">
-                                        <input type="email" id="email" class="input" placeholder="Email" required>
-                                        <input type="password" id="password" class="input" placeholder="Crie uma senha"
-                                            required>
-                                        <button class="form-btn" type="submit">Criar Conta</button>
-                                    </form>
-                                    <p class="sign-up-label">
-                                        Já tem uma conta? <span class="sign-up-link">Iniciar sessão</span>
-                                    </p>
-                                    <div class="buttons-container">
-                                        <div class="apple-login-button">
-                                            <svg stroke="currentColor" fill="currentColor" stroke-width="0"
-                                                class="apple-icon" viewBox="0 0 1024 1024" height="1em" width="1em"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M747.4 535.7c-.4-68.2 30.5-119.6 92.9-157.5-34.9-50-87.7-77.5-157.3-82.8-65.9-5.2-138 38.4-164.4 38.4-27.9 0-91.7-36.6-141.9-36.6C273.1 298.8 163 379.8 163 544.6c0 48.7 8.9 99 26.7 150.8 23.8 68.2 109.6 235.3 199.1 232.6 46.8-1.1 79.9-33.2 140.8-33.2 59.1 0 89.7 33.2 141.9 33.2 90.3-1.3 167.9-153.2 190.5-221.6-121.1-57.1-114.6-167.2-114.6-170.7zm-105.1-305c50.7-60.2 46.1-115 44.6-134.7-44.8 2.6-96.6 30.5-126.1 64.8-32.5 36.8-51.6 82.3-47.5 133.6 48.4 3.7 92.6-21.2 129-63.7z">
-                                                </path>
-                                            </svg>
-                                            <span>Cadastre-se com a Apple</span>
-                                        </div>
-                                        <div class="google-login-button">
-                                            <svg stroke="currentColor" fill="currentColor" stroke-width="0"
-                                                version="1.1" x="0px" y="0px" class="google-icon" viewBox="0 0 48 48"
-                                                height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill="#FFC107"
-                                                    d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12 c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24 c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z">
-                                                </path>
-                                                <path fill="#FF3D00"
-                                                    d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657 C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z">
-                                                </path>
-                                                <path fill="#4CAF50"
-                                                    d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36 c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z">
-                                                </path>
-                                                <path fill="#1976D2"
-                                                    d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571 c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z">
-                                                </path>
-                                            </svg>
-                                            <span>Cadastre-se com Google</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <a class="close" onclick="closeModal()">Fechar</a>
-                            </div>
-                        </div>
-                    </div>
-                </section-modal>
+        
+        
+    
+        <div class="modal" id="loginModal">
+            <div style="background: #16191a;" class="modal-content-login">
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+                <form class="form login-form">
+                    <img class="logo-modal" src="./assets/src/logo.png" alt="logo">
+                    <p class="title">Login</p>
+                    <input placeholder="Usuário" class="input" type="text" name="email" />
+                    <input placeholder="Senha" class="input" type="password" name="password" />
+                    <button class="btn-lodin" type="submit">Entrar</button>
+                    <p class="toggle-form">
+                        Não tem uma conta? <span onclick="toggleForm()">Criar Conta</span>
+                    </p>
+                </form>
+    
+                <form class="form register-form" style="display: none;">
+                    <img class="logo-modal" src="./assets/src/logo.png" alt="logo">
+                    <p class="title">Crie sua Conta</p>
+                    <input placeholder="Usuário" class="input" type="text" name="usuário" />
+                    <input placeholder="Email" class="input" type="email" name="email" />
+                    <input placeholder="Senha" class="input" type="password" name="password" />
+                    <button class="btn-login" type="submit">Registrar</button>
+                    <p class="toggle-form">
+                        Já tem uma conta? <span onclick="toggleForm()">Login</span>
+                    </p>
+                </form>
             </div>
-        </header>
-    </div>
+        </div>
+    </header>
 
     <div class="w3-content" style="max-width:1400px">
         <!-- Header -->
@@ -214,7 +177,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="w3-col m4">
+                <div class="w3-col m2">
                     <div class="container-modal mt-3">
                         <p>
                             <span class="w3-padding-large w3-right">
@@ -284,28 +247,15 @@
                     </iframe>
                 </div>
             </div>
-        </section>
 
-        <section>
-            <div data-aos="fade-left">
-                <div class="body-clima">
-                    <div class="container-temp">
-                        <input class="input-cidade" placeholder="Digite o nome da cidade">
-                        <button onclick="cliqueiNoBotao()">
-                            <img class="lupa" src="https://www.svgrepo.com/show/488200/find.svg" alt="Buscar">
-                        </button>
-
-                        <div class="caixa-media">
-                            <h2 class="cidade">Tempo em Brasília</h2>
-                            <p class="temp">28°C</p>
-                            <p class="text-previsao">Céu limpo</p> <!-- Descrição do clima -->
-                            <div class="condicao-clima">
-                                <img class="icone" src="https://openweathermap.org/img/wn/04n.png" alt="Ícone do clima">
-                                <p class="condicao">Céu Limpo</p> <!-- Exibição da condição detalhada -->
-                            </div>
-                            <p class="umidade">Umidade: 70%</p>
-                        </div>
-                    </div>
+            <div data-aos="fade-right">
+                <div class="video">
+                    <iframe width="560" height="315" 
+                        src="https://www.youtube.com/embed/KwFrvsnxPW0" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
                 </div>
             </div>
         </section>
@@ -350,10 +300,29 @@
             </section>
 
             <!-- Seção Extra -->
-            <section class="card">
-                <h2>Seção Extra</h2>
-                <p>Conteúdo adicional pode ser colocado aqui.</p>
-            </section>
+            <section>
+                    <div data-aos="fade-left">
+                        <div class="body-clima">
+                            <div class="container-temp">
+                                <input class="input-cidade" placeholder="Digite o nome da cidade">
+                                <button onclick="cliqueiNoBotao()">
+                                    <img class="lupa" src="https://www.svgrepo.com/show/488200/find.svg" alt="Buscar">
+                                </button>
+        
+                                <div class="caixa-media">
+                                    <h2 class="cidade">Tempo em Brasília</h2>
+                                    <p class="temp">28°C</p>
+                                    <p class="text-previsao">Céu limpo</p> <!-- Descrição do clima -->
+                                    <div class="condicao-clima">
+                                        <img class="icone" src="https://openweathermap.org/img/wn/04n.png" alt="Ícone do clima">
+                                        <p class="condicao">Céu Limpo</p> <!-- Exibição da condição detalhada -->
+                                    </div>
+                                    <p class="umidade">Umidade: 70%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
             <!-- Seção de Informações -->
             <section class="card">
@@ -546,11 +515,30 @@
             2024 Todos os direitos reservados JUNINHO BLOG
         </div>
     </footer>
+    
+
+
+
     <script src="index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script>
         AOS.init();
+    </script>
+
+    <script>
+        function openModal() {
+            document.getElementById("loginModal").style.display = "flex";
+        }
+        function closeModal() {
+            document.getElementById("loginModal").style.display = "none";
+        }
+        function toggleForm() {
+            const loginForm = document.querySelector('.login-form');
+            const registerForm = document.querySelector('.register-form');
+            loginForm.style.display = loginForm.style.display === 'none' ? 'flex' : 'none';
+            registerForm.style.display = registerForm.style.display === 'none' ? 'flex' : 'none';
+        }
     </script>
 
 

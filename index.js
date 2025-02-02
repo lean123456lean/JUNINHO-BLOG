@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
         content.style.display = "block"; // Mostra o conteúdo
     }, 3000); // Ajuste o tempo conforme necessário
 });
+
 /* Título da página  */
 const textElement = document.getElementById('text');
 const texts = [
@@ -149,6 +150,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 /* MODAL PARA lOGIN DE USUARIOS */
+/*
 let modalVisible = false;
 
 function openModal() {
@@ -164,7 +166,9 @@ function closeModal() {
         modalVisible = false;
     }
 }
+*/
 
+/*
 //Login modal usuário
 
 async function loginUser(event) {
@@ -193,12 +197,12 @@ async function loginUser(event) {
     }
 }
 
+*/
 
 
 
 
-
-//Proteção para rotas no fronend
+//Proteção para rotas no frontend
 
 async function accessProtectedRoute() {
     const token = localStorage.getItem('token');
@@ -254,7 +258,6 @@ setInterval(updateDateTime, 1000);
 
 
 /* Clima tempo */
-// Substitua pela sua chave da API
 let chave = "95b21e4252bb169915cd54982dc75099";
 function colocarNaTela(dados) {
     console.log(dados); // Verifique se os dados estão sendo retornados corretamente
@@ -641,6 +644,7 @@ function createDollarChart(data) {
     });
 }
 
+
 // Função para buscar a cotação do dólar e atualizar
 async function fetchDollarQuote() {
     try {
@@ -730,3 +734,152 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log("Cookies recusados. Banner ocultado.");
     });
 });
+
+
+
+
+// Autenticação de login e registro
+
+async function handleAuth(event, type) {
+    event.preventDefault();
+
+    const form = event.target;
+    const data = {
+        email: form.querySelector('input[name="email"]').value,
+        password: form.querySelector('input[name="password"]').value,
+    };
+
+    if (type === 'register') {
+        data.name = form.querySelector('input[type="text"]').value;
+    }
+
+    const endpoint = type === 'login' ? '/api/login' : '/api/register';
+
+    try {
+        const response = await fetch(`http://localhost:3000${endpoint}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            alert(result.message);
+            if (type === 'login') {
+                sessionStorage.setItem('token', result.token);
+
+                // Atualizar a página após login
+                location.reload();
+            }
+        } else {
+            alert(result.message);
+        }
+    } catch (err) {
+        alert('Erro ao conectar ao servidor.');
+    }
+}
+
+document.querySelector('.login-form').addEventListener('submit', (e) => handleAuth(e, 'login'));
+document.querySelector('.register-form').addEventListener('submit', (e) => handleAuth(e, 'register'));
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const token = sessionStorage.getItem('token');
+    const userIcon = document.querySelector('.user-icon');
+
+    console.log("Token no sessionStorage:", token); // Verifique se o token está presente
+
+    if (token) {
+        console.log("Token encontrado. Exibindo ícone...");
+        userIcon.style.display = 'block';  // Exibe o ícone
+    } else {
+        console.log("Token não encontrado. Escondendo ícone...");
+        userIcon.style.display = 'none';   // Esconde o ícone
+    }
+});
+
+
+async function getUserProfile() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Você precisa estar logado!');
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:3000/api/profile', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        const data = await response.json();
+        console.log('Dados do usuário:', data);
+    } catch (err) {
+        console.error('Erro ao buscar dados:', err);
+    }
+}
+
+
+
+function authMiddleware(req, res, next) {
+    const token = req.headers['authorization'];
+
+    if (!token) {
+        return res.status(401).json({ message: 'Acesso negado!' });
+    }
+
+    try {
+        const decoded = jwt.verify(token.split(' ')[1], SECRET);
+        req.user = decoded;
+        next();
+    } catch (err) {
+        res.status(403).json({ message: 'Token inválido!' });
+    }
+}
+
+
+// token Jwt e mostra o icone de usuario
+function checkUserLoggedIn() {
+    const token = localStorage.getItem('token');
+    const userIcon = document.getElememtById('userIcon');
+
+    if (token) {
+        userIcon.style.display = "block";
+    } else {
+        userIcon.style.display = "none";
+    }
+}
+
+// Verifica o login quando a página carrega
+window.onload = checkUserLoggedIn;
+
+// função de Logout 
+
+function logout() {
+    localStorage.removeItem('token');
+    checkUserLoggedIn();
+    alert('Você saiu da conta!');
+    window.location.reload();
+}
+
+/*
+//Seo usuário desejar sair da conta, ele pode clicar no botão "Sair" e ser redirecionado para a página de login.
+
+document.getElementById('logoutBtn').addEventListener('click', function() {
+    // Remover o token do sessionStorage
+    sessionStorage.removeItem('token');
+
+    // Atualizar a interface do usuário
+    document.getElementById('userIcon').style.display = 'none';
+
+    // Exibir mensagem de logout (opcional)
+    alert('Você foi desconectado.');
+
+    // Redirecionar (opcional)
+    window.location.href = '/login';
+});
+
+*/

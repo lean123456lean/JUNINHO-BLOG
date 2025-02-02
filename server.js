@@ -8,34 +8,26 @@ const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
-
-
-
 const app = express();
 const PORT = 3000;
 
 // Acessando a variável de ambiente
 const apiKey = process.env.API_KEY;
 const apiSecret = process.env.API_SECRET;
+const secretKey = process.env.JWT_SECRET || 'mysecretkey'; // Definir a chave secreta para JWT
 
 console.log('API Key:', apiKey);  // Isso agora deve funcionar
 
+// Middleware
 app.use(cors({
   origin: ["https://lean123456lean.github.io", "http://127.0.0.1:5503"],
   methods: 'GET,POST,PUT,DELETE',
-  credentials: true, 
+  credentials: true,
 }));
-
-// Configuração dos Middlewares
-app.use(cors());
-// Middleware
 app.use(bodyParser.json());
-// Middleware para analisar cookies
 app.use(cookieParser());
 
-
-
-// Configurar banco de dados SQLite
+// Configuração do banco de dados SQLite
 const db = new sqlite3.Database('./database.db', (err) => {
   if (err) {
     console.error('Erro ao conectar ao banco de dados:', err.message);
@@ -44,27 +36,25 @@ const db = new sqlite3.Database('./database.db', (err) => {
   }
 });
 
-
-// Criar tabela de usuários, caso não exista
-db.run(
-  `CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    email TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL
-  )`,
-  (err) => {
-    if (err) {
-      console.error('Erro ao criar tabela de usuários:', err.message);
-    } else {
-      console.log('Tabela "users" pronta para uso.');
-    }
-  }
-);
-
-
 // Criar tabelas se não existirem
 db.serialize(() => {
+  // Tabela "users"
+  db.run(
+    `CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      email TEXT NOT NULL UNIQUE,
+      password TEXT NOT NULL
+    )`,
+    (err) => {
+      if (err) {
+        console.error('Erro ao criar tabela de usuários:', err.message);
+      } else {
+        console.log('Tabela "users" pronta para uso.');
+      }
+    }
+  );
+
   // Tabela "comments"
   db.run(
     `CREATE TABLE IF NOT EXISTS comments (
@@ -99,53 +89,71 @@ db.serialize(() => {
   );
 });
 
-
 // Simulação de banco de dados
 const users = [];
 
-
 // Rota de registro
 app.post('/api/register', async (req, res) => {
-  const { name, email, password } = req.body; // Agora req.body deve estar definido
+  const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
     return res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
   }
 
-  const existingUser = users.find((user) => user.email === email);
+  const query = `SELECT * FROM users WHERE email = ?`;
+  db.get(query, [email], async (err, row) => {
+    if (err) {
+      return res.status(500).json({ message: 'Erro ao verificar o usuário' });
+    }
 
-  if (existingUser) {
-    return res.status(400).json({ message: 'Usuário já cadastrado!' });
-  }
+    if (row) {
+      return res.status(400).json({ message: 'Usuário já cadastrado!' });
+    }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
-  users.push({ name, email, password: hashedPassword });
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-  res.status(201).json({ message: 'Usuário cadastrado com sucesso!' });
+    const insertQuery = `INSERT INTO users (name, email, password) VALUES (?, ?, ?)`;
+    db.run(insertQuery, [name, email, hashedPassword], function (err) {
+      if (err) {
+        return res.status(500).json({ message: 'Erro ao registrar o usuário' });
+      }
+
+      res.status(201).json({ message: 'Usuário registrado com sucesso!' });
+    });
+  });
 });
 
 // Rota de login
-app.post('/api/login', (req, res) => {
+app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
     return res.status(400).json({ message: 'Email e senha são obrigatórios!' });
   }
 
-  const user = users.find((u) => u.email === email);
-  if (!user) {
-    return res.status(404).json({ message: 'Usuário não encontrado!' });
-  }
+  const query = `SELECT * FROM users WHERE email = ?`;
+  db.get(query, [email], async (err, row) => {
+    if (err) {
+      return res.status(500).json({ message: 'Erro ao verificar o usuário' });
+    }
 
-  const token = jwt.sign({ email: user.email }, secretKey, { expiresIn: '1h' });
-  res.json({ token });
+    if (!row) {
+      return res.status(404).json({ message: 'Usuário não encontrado!' });
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(password, row.password);
+    if (!isPasswordCorrect) {
+      return res.status(401).json({ message: 'Senha incorreta!' });
+    }
+
+
+    const token = jwt.sign({ email: row.email }, secretKey, { expiresIn: '1h' });
+    console.log("Token gerado:", token);  // Adicione esta linha
+    res.status(200).json({ message: 'Login bem-sucedido!', token });
+  });
 });
 
-
-
-
-
-// Endpoint para buscar artigos do Dev.to
+// Rota para obter artigos do Dev.to
 app.get('/api/devto-articles', async (req, res) => {
   try {
     const response = await axios.get('https://dev.to/api/articles', {
@@ -196,161 +204,25 @@ app.post('/subscribe', (req, res) => {
 });
 
 
-
-
-// Permitir somente a origem do seu frontend
-const corsOptions = {
-  origin: 'http://127.0.0.1:5503', // Substitua pelo domínio correto
-  methods: 'GET,POST,PUT,DELETE', // Métodos HTTP permitidos
-  allowedHeaders: 'Content-Type,Authorization', // Cabeçalhos permitidos
-};
-
-app.use(cors(corsOptions));
-
-// Outras configurações do servidor
-app.use(express.json());
-
-app.post('/login', (req, res) => {
-  const { email, password } = req.body;
-
-  if (email === 'admin@example.com' && password === '123456') {
-      res.json({ token: 'abc123xyz' });
-  } else {
-      res.status(401).json({ message: 'Credenciais inválidas' });
-  }
-});
-
-let comments = [];
 // Rota para obter comentários
+let comments = [];
 app.get("/comments", (req, res) => {
-    res.json(comments);
+  res.json(comments);
 });
 
 // Rota para adicionar um comentário
 app.post("/comments", (req, res) => {
-    const { author, text } = req.body;
+  const { author, text } = req.body;
 
-    if (!author || !text) {
-        return res.status(400).json({ error: "Author and text are required." });
-    }
-
-    comments.push({ author, text });
-    res.status(201).json({ message: "Comment added successfully!" });
-});
-
-
-// Carregar comentários
-fetch("http://localhost:3000/comments")
-    .then((response) => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then((data) => {
-        console.log("Comentários carregados:", data);
-        // Atualize a lista de comentários no frontend
-    })
-    .catch((error) => {
-        console.error("Erro ao carregar comentários:", error);
-    });
-
-
-
-
-    
-    
-    // Exemplo: Definir um cookie na rota de login
-    app.post('/api/login', async (req, res) => {
-      const { email, password } = req.body;
-  
-      if (!email || !password) {
-          return res.status(400).json({ message: 'Email e senha são obrigatórios!' });
-      }
-  
-      const user = users.find((u) => u.email === email);
-      if (!user) {
-          return res.status(404).json({ message: 'Usuário não encontrado!' });
-      }
-  
-      const isPasswordCorrect = await bcrypt.compare(password, user.password);
-      if (!isPasswordCorrect) {
-          return res.status(401).json({ message: 'Senha incorreta!' });
-      }
-  
-      const token = jwt.sign({ email: user.email }, secretKey, { expiresIn: '1h' });
-      res.status(200).json({ message: 'Login bem-sucedido!', token });
-  });
-
-  
-
-
-     //Rota de registro usuários 
-  app.post('/api/register', async (req, res) => {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-        return res.status(400).json({ message: 'Email e senha são obrigatórios!' });
-    }
-
-    const existingUser = users.find((u) => u.email === email);
-    if (existingUser) {
-        return res.status(400).json({ message: 'Email já cadastrado!' });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10); // Criptografa a senha
-    const newUser = { email, password: hashedPassword };  // Cria o novo usuário
-    users.push(newUser);  // Adiciona à lista de usuários
-    console.log('Novo usuário registrado:', email);  // Debug para conferir
-
-    res.status(201).json({ message: 'Usuário registrado com sucesso!' });
-});
-
-
-
-// Exemplo: Rota protegida que verifica o cookie
-app.get('/api/protected', (req, res) => {
-  const token = req.cookies.authToken;
-
-  if (!token) {
-      return res.status(401).json({ message: 'Acesso negado!' });
+  if (!author || !text) {
+    return res.status(400).json({ error: "Author and text are required." });
   }
 
-  try {
-      const verified = jwt.verify(token, secretKey);
-      res.status(200).json({ message: 'Acesso permitido!', user: verified });
-  } catch (error) {
-      res.status(401).json({ message: 'Token inválido!' });
-  }
+  comments.push({ author, text });
+  res.status(201).json({ message: "Comment added successfully!" });
 });
 
-
-app.get('/tech-news', async (req, res) => {
-    try {
-        const response = await axios.get(`https://newsapi.org/v2/top-headlines?category=technology&apiKey=${apiKey}`);
-        res.json(response.data);
-    } catch (error) {
-        res.status(500).json({ error: 'Erro ao obter notícias' });
-    }
-});
-
-
-
-
-
-
-/*
-export function handler(req, res) {
-  if (req.method === 'GET') {
-    res.status(200).json({ message: 'Hello from server.js!' });
-  } else {
-    res.status(405).json({ error: 'Method Not Allowed' });
-  }
-}
-*/
 // Iniciar o servidor
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
-
-
