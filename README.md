@@ -79,6 +79,10 @@ Contribuição
 Sinta-se à vontade para contribuir com melhorias. Faça um fork deste repositório, implemente suas alterações e envie um pull request.
 
 
+![Captura de tela 2025-02-01 205526](https://github.com/user-attachments/assets/a458229c-7ea8-4e32-959f-3624232623ce)
 
-![Captura de tela 2025-01-07 074304](https://github.com/user-attachments/assets/551023c1-28ce-4165-a29d-c33d7d8e809d)
 
+Atualizações programada 02/02/2025 <br>
+Próxiama 09/02/2025
+<br>
+![Captura de tela 2025-02-01 213019](https://github.com/user-attachments/assets/6d8972f2-0301-4432-88c1-f5b3c9aa4ece)
