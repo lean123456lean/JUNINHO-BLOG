@@ -27,14 +27,14 @@ function typeEffect() {
     if (charIndex < texts[textIndex].length) {
         textElement.textContent += texts[textIndex].charAt(charIndex);
         charIndex++;
-        setTimeout(typeEffect, 100); // Velocidade de digitação
+        setTimeout(typeEffect, 100); 
     } else {
         setTimeout(() => {
             textElement.textContent = "";
             charIndex = 0;
-            textIndex = (textIndex + 1) % texts.length; // Avança para a próxima frase
+            textIndex = (textIndex + 1) % texts.length; 
             typeEffect();
-        }, 2000); // Pausa antes de exibir a próxima frase
+        }, 2000); 
     }
 }
 
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-// usso da api para atualizar post populares da página
+// uso da api para atualizar post populares da página
 document.addEventListener("DOMContentLoaded", function () {
     const apiKey = "f309d331c4994735bce1f5c3fe2f9882"; // Substitua com sua chave da News API ou outra API
     const apiUrl = `https://newsapi.org/v2/top-headlines?category=technology&apiKey=${apiKey}`;
@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(response => response.json())
             .then(data => {
                 const postsList = document.getElementById('popular-posts');
-                postsList.innerHTML = ""; // Limpa a lista existente
+                postsList.innerHTML = ""; 
 
                 // Adiciona cada post na lista
                 data.articles.forEach(article => {
@@ -249,10 +249,10 @@ function updateDateTime() {
     document.getElementById('currentTime').textContent = currentTime;
 }
 
-// Atualizar a data e hora imediatamente
+
 updateDateTime();
 
-// Atualizar a data e hora a cada 1 segundo
+
 setInterval(updateDateTime, 1000);
 
 
@@ -609,18 +609,18 @@ function createDollarChart(data) {
         dollarChart.destroy();
     }
 
-    console.log("Dados para o gráfico:", data); // Log dos dados que serão passados para o gráfico
+    console.log("Dados para o gráfico:", data);
 
     dollarChart = new Chart(ctx, {
-        type: 'line',  // Tipo do gráfico (linha)
+        type: 'line',  
         data: {
-            labels: data.labels,  // Datas/tempos
+            labels: data.labels,  
             datasets: [{
                 label: 'Cotação do Dólar',
-                data: data.values,  // Valores da cotação
-                borderColor: '#2ecc71',  // Cor da linha
-                fill: false,  // Não preenche o gráfico
-                tension: 0.1  // Suaviza a linha
+                data: data.values,  
+                borderColor: '#2ecc71',  
+                fill: false,  
+                tension: 0.1  
             }]
         },
         options: {
@@ -644,36 +644,35 @@ function createDollarChart(data) {
     });
 }
 
-
 // Função para buscar a cotação do dólar e atualizar
 async function fetchDollarQuote() {
+    
     try {
         const response = await fetch('https://v6.exchangerate-api.com/v6/YOUR_API_KEY/latest/USD');
         const data = await response.json();
 
-        console.log("Resposta da API:", data); // Log para verificar a resposta da API
+        console.log("Resposta da API:", data);
 
-        const quote = data.result;
+        if (!data.conversion_rates || !data.conversion_rates.BRL) {
+            throw new Error("Cotação do BRL não encontrada na resposta da API.");
+        }
 
-        // Arredonda o valor para 2 casas decimais
+        const quote = data.conversion_rates.BRL;
         const roundedQuote = quote.toFixed(2);
 
-        // Atualiza o texto da cotação
         document.getElementById('quote').textContent = `R$ ${roundedQuote}`;
 
-        // Dados para o gráfico (incluir valores históricos e a cotação atual)
         const chartData = {
             labels: ['2025-01-01', '2025-01-02', '2025-01-03', '2025-01-04', 'Agora'],
-            values: [5.2, 5.1, 5.3, 5.4, parseFloat(roundedQuote)]  // Inclui a cotação atual
+            values: [5.2, 5.1, 5.3, 5.4, parseFloat(roundedQuote)]
         };
 
-        // Cria o gráfico com os dados atualizados
-        createDollarChart(chartData);
     } catch (error) {
-        console.error("Erro ao obter a cotação:", error);
-        document.getElementById('quote').textContent = 'Erro ao carregar a cotação.';
+        console.error("Erro ao obter cotação:", error);
+        document.getElementById('quote').textContent = "Erro ao obter cotação";
     }
 }
+
 
 
 // Carrega a cotação assim que a página é carregada
@@ -788,14 +787,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const token = sessionStorage.getItem('token');
     const userIcon = document.querySelector('.user-icon');
 
-    console.log("Token no sessionStorage:", token); // Verifique se o token está presente
+    console.log("Token no sessionStorage:", token); 
 
     if (token) {
         console.log("Token encontrado. Exibindo ícone...");
-        userIcon.style.display = 'block';  // Exibe o ícone
+        userIcon.style.display = 'block';  
     } else {
         console.log("Token não encontrado. Escondendo ícone...");
-        userIcon.style.display = 'none';   // Esconde o ícone
+        userIcon.style.display = 'none';   
     }
 });
 
